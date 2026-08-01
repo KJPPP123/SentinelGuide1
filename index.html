@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>戍卫 · 卡牌 + 结果页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', 'PingFang SC', sans-serif;
+            padding: 2rem 1.5rem;
+            gap: 2rem;
+        }
+
+        /* 卡牌区 */
+        .card-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .card-wrapper {
+            perspective: 800px;
+            width: 340px;
+            height: 460px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 1s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(360deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            backface-visibility: hidden;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid #b8954a;
+        }
+
+        .card-front img,
+        .card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .enter-btn {
+            padding: 12px 36px;
+            background: #b8954a;
+            border: none;
+            border-radius: 30px;
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            box-shadow: 0 0 20px rgba(184, 149, 74, 0.2);
+        }
+
+        .enter-btn:hover {
+            background: #c9a96e;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(184, 149, 74, 0.4);
+        }
+
+        .status-tip {
+            color: #7e6e5c;
+            font-size: 13px;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+
+        /* 结果页 */
+        .result-section {
+            width: 100%;
+            max-width: 480px;
+            background: #e6dac9;
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            border: 1px solid #b8954a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #332a22;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 4px;
+        }
+
+        .result-sub {
+            text-align: center;
+            font-size: 12px;
+            color: #7e6e5c;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
+
+        .result-name {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 34px;
+            font-weight: 900;
+            color: #6c5a44;
+            letter-spacing: 6px;
+            margin-bottom: 8px;
+        }
+
+        .result-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .result-tags span {
+            background: #d4c4b0;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #4a3a2a;
+            border: 1px solid #c8b69e;
+        }
+
+        .result-desc {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #2e2922;
+            padding: 14px 16px;
+            background: rgba(245, 239, 232, 0.4);
+            border-radius: 8px;
+            border-left: 3px solid #a0877a;
+            margin-bottom: 14px;
+        }
+
+        .result-desc strong {
+            color: #5c4c3c;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .info-card {
+            background: rgba(255, 248, 240, 0.5);
+            border-radius: 6px;
+            padding: 8px 12px;
+            border: 1px solid rgba(100, 70, 40, 0.15);
+            text-align: center;
+        }
+
+        .info-card .label {
+            font-size: 10px;
+            color: #776b5e;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .info-card .value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2e2922;
+            margin-top: 2px;
+        }
+
+        .info-card.span-full {
+            grid-column: 1 / -1;
+        }
+
+        .spirit-box {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 248, 240, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(100, 70, 40, 0.08);
+            margin-bottom: 14px;
+        }
+
+        .spirit-box img {
+            width: 44px;
+            height: 44px;
+            opacity: 0.85;
+        }
+
+        .spirit-box .spirit-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a3a2a;
+            margin-top: 4px;
+        }
+
+        .spirit-box .spirit-desc {
+            font-size: 12px;
+            color: #3d352d;
+            line-height: 1.7;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .match-box {
+            background: rgba(255, 248, 240, 0.4);
+            border-radius: 8px;
+            padding: 14px 16px;
+            border: 1px solid rgba(100, 70, 40, 0.1);
+            margin-bottom: 14px;
+        }
+
+        .match-box .match-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3d352d;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .match-item {
+            margin-bottom: 14px;
+            border-bottom: 1px dashed rgba(100, 70, 40, 0.15);
+            padding-bottom: 12px;
+        }
+
+        .match-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .match-item .match-level {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a3a2a;
+            margin-bottom: 6px;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .progress-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .prog-label {
+            font-size: 11px;
+            color: #5f5549;
+            width: 56px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .prog-track {
+            flex: 1;
+            height: 10px;
+            background: rgba(200, 180, 160, 0.6);
+            border-radius: 999px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 999px;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .prog-fill.soul {
+            background: #7a8b9e;
+        }
+
+        .prog-fill.body {
+            background: #ac8e68;
+        }
+
+        .prog-pct {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a3a2a;
+            width: 32px;
+            flex-shrink: 0;
+            text-align: left;
+        }
+
+        .radar-container {
+            background: rgba(255, 248, 240, 0.4);
+            border-radius: 8px;
+            padding: 12px 10px;
+            border: 1px solid rgba(100, 70, 40, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .radar-container .radar-title {
+            font-size: 12px;
+            color: #5f5549;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        #radarChart {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #6b6055;
+            border-top: 1px solid rgba(100, 70, 40, 0.15);
+            padding-top: 14px;
+            margin-top: 6px;
+        }
+
+        .footer a {
+            color: #7e6e5c;
+            text-decoration: none;
+            border-bottom: 1px dotted #7e6e5c;
+        }
+
+        @media (max-width: 420px) {
+            .card-wrapper {
+                width: 280px;
+                height: 380px;
+            }
+            .result-section {
+                padding: 1.2rem 1rem;
+            }
+            .result-name {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 卡牌区 ===== -->
+    <div class="card-section">
+        <div style="color: #a0877a; font-size: 14px; letter-spacing: 2px;">⚔ 戍卫</div>
+
+        <div class="card-wrapper" id="cardWrapper">
+            <div class="card-inner" id="cardInner">
+                <div class="card-front">
+                    <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%8D%E5%8D%AB.jpg" alt="戍卫" />
+                </div>
+                <div class="card-back">
+                    <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8D%A1%E8%83%8C.jpg" alt="卡背" />
+                </div>
+            </div>
+        </div>
+
+        <button class="enter-btn" id="viewResultBtn">✦ 查看结果</button>
+        <div class="status-tip" id="statusTip">🔄 翻转中…</div>
+    </div>
+
+    <!-- ===== 结果页区 ===== -->
+    <div class="result-section" id="resultSection">
+
+        <div class="result-title">⚔ 你的哨向身份牌</div>
+        <div class="result-sub">— SENTINEL &amp; GUIDE —</div>
+        <div class="result-name">戍卫</div>
+
+        <div class="result-tags">
+            <span>哨兵</span>
+            <span>稳如磐石</span>
+            <span>忠诚坚毅</span>
+            <span>恪守纪律</span>
+        </div>
+
+        <div class="result-desc">
+            你是戍卫，一位久经沙场的哨兵，褪去了浮躁，如同大地的支柱一般稳定。<br /><br />
+            你的忠诚基于深刻的责任感和信念，一旦认定目标，就会建立稳固的情感联结。在困境中能够展现出惊人的韧性，不会轻易动摇，是塔内最值得信赖的依靠。<br /><br />
+            你尊重塔里的规则，擅长执行精准指令。你比任何人都清楚：规则是无数次血与火淬炼出的最优解。它记录过前人的跌倒，标记过陷阱的位置，也守护过无数像你一样的士兵活着走出战场。<br /><br />
+            <strong>—— 成长建议 ——</strong><br />
+            警惕陷入固化的思维定式，试着注入一些变通与创新。真正的磐石既能抵御洪流，亦能成为滋养新芽的沃土。
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">塔内阶层</div>
+                <div class="value">中层精英</div>
+            </div>
+            <div class="info-card">
+                <div class="label">所属部门</div>
+                <div class="value">战斗部</div>
+            </div>
+            <div class="info-card">
+                <div class="label">级别</div>
+                <div class="value">A</div>
+            </div>
+            <div class="info-card">
+                <div class="label">融合程度</div>
+                <div class="value">高兼容</div>
+            </div>
+            <div class="info-card span-full">
+                <div class="label">疏导次数</div>
+                <div class="value">每月 1 次</div>
+            </div>
+        </div>
+
+        <div class="spirit-box">
+            <div style="font-size:12px; color:#776b5e; letter-spacing:1px;">精神体</div>
+            <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%98%E9%A9%AC.svg" alt="战马" />
+            <div class="spirit-name">战马</div>
+            <div class="spirit-desc">
+                马儿是一种骄傲且自尊心极强的精神体。它的忠诚是一种本能，一旦认定主人，几乎不会离开。<br /><br />
+                在持久战下，马儿的耐力是绝佳的战术搭档。当主人需要长途奔袭或阵地坚守时，它们能保持良好的精力和充沛的活力。<br /><br />
+                马儿对主人情绪的感知极为敏锐。它们能通过观察主人，感知到主人的精神波动，它们会安静地站在主人身边，稳定主人的情绪，直到主人准备好继续向前。
+            </div>
+        </div>
+
+        <div class="match-box">
+            <div class="match-title"> 精神体适配度</div>
+
+            <div class="match-item">
+                <div class="match-level">鹿</div>
+                <div class="progress-row">
+                    <span class="prog-label">灵魂契合</span>
+                    <div class="prog-track"><div class="prog-fill soul" style="width:95%;"></div></div>
+                    <span class="prog-pct">95%</span>
+                </div>
+                <div class="progress-row">
+                    <span class="prog-label">身体契合</span>
+                    <div class="prog-track"><div class="prog-fill body" style="width:90%;"></div></div>
+                    <span class="prog-pct">90%</span>
+                </div>
+            </div>
+
+            <div class="match-item">
+                <div class="match-level">乌鸦</div>
+                <div class="progress-row">
+                    <span class="prog-label">灵魂契合</span>
+                    <div class="prog-track"><div class="prog-fill soul" style="width:68%;"></div></div>
+                    <span class="prog-pct">68%</span>
+                </div>
+                <div class="progress-row">
+                    <span class="prog-label">身体契合</span>
+                    <div class="prog-track"><div class="prog-fill body" style="width:84%;"></div></div>
+                    <span class="prog-pct">84%</span>
+                </div>
+            </div>
+
+            <div class="match-item">
+                <div class="match-level">猫头鹰</div>
+                <div class="progress-row">
+                    <span class="prog-label">灵魂契合</span>
+                    <div class="prog-track"><div class="prog-fill soul" style="width:52%;"></div></div>
+                    <span class="prog-pct">52%</span>
+                </div>
+                <div class="progress-row">
+                    <span class="prog-label">身体契合</span>
+                    <div class="prog-track"><div class="prog-fill body" style="width:71%;"></div></div>
+                    <span class="prog-pct">71%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="radar-container">
+            <div class="radar-title">◈ 六维能力雷达</div>
+            <canvas id="radarChart" width="260" height="260"></canvas>
+        </div>
+
+        <div class="footer">
+            ✦ 测试制作 · <a href="#">@柯基胖屁屁</a><br />
+            <span style="font-size:11px; color:#766a5e;">更多测试 · OC设定 · 哨向世界</span>
+        </div>
+
+    </div>
+
+    <script>
+        // ===== 卡牌翻转 =====
+        const cardWrapper = document.getElementById('cardWrapper');
+        const cardInner = document.getElementById('cardInner');
+        const statusTip = document.getElementById('statusTip');
+        const viewBtn = document.getElementById('viewResultBtn');
+        const resultSection = document.getElementById('resultSection');
+
+        // 自动翻转一次
+        function autoFlip() {
+            cardWrapper.classList.add('flipped');
+            statusTip.textContent = '🔄 翻转中…';
+            setTimeout(() => {
+                statusTip.textContent = '✅ 戍卫';
+            }, 1200);
+        }
+
+        window.addEventListener('load', function() {
+            cardWrapper.classList.remove('flipped');
+            statusTip.textContent = '⏳ 准备…';
+            setTimeout(autoFlip, 500);
+        });
+
+        // 点击卡牌手动翻转
+        cardWrapper.addEventListener('click', function() {
+            this.classList.toggle('flipped');
+            const isFlipped = this.classList.contains('flipped');
+            statusTip.textContent = isFlipped ? '🔁 背面 · 卡背' : '🔁 正面 · 戍卫';
+        });
+
+        // ===== 查看结果按钮 =====
+        viewBtn.addEventListener('click', function() {
+            resultSection.classList.add('show');
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            this.textContent = '✅ 已显示结果';
+            this.style.opacity = '0.6';
+            this.style.pointerEvents = 'none';
+        });
+
+        // ===== 雷达图 =====
+        window.onload = function() {
+            const canvas = document.getElementById('radarChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width,
+                h = canvas.height;
+            const cx = w / 2,
+                cy = h / 2;
+            const radius = 88;
+            const sides = 6;
+            const values = [9, 3, 7, 7, 3, 5];
+            const labels = ['感知力', '共情力', '稳定性', '爆发力', '神秘度', '意志力'];
+
+            ctx.clearRect(0, 0, w, h);
+
+            for (let ring = 1; ring <= 5; ring++) {
+                ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
+                    const r = radius * (ring / 5);
+                    const x = cx + r * Math.cos(angle);
+                    const y = cy + r * Math.sin(angle);
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = '#b2a397';
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+
+            for (let i = 0; i < sides; i++) {
+                const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+                ctx.strokeStyle = '#b2a397';
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+
+            ctx.beginPath();
+            for (let i = 0; i < sides; i++) {
+                const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
+                const r = radius * (Math.min(Math.max(values[i], 0), 10) / 10);
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(160, 135, 122, 0.15)';
+            ctx.fill();
+            ctx.strokeStyle = '#a88b78';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            for (let i = 0; i < sides; i++) {
+                const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
+                const r = radius * (Math.min(Math.max(values[i], 0), 10) / 10);
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#a88b78';
+                ctx.fill();
+                const labelR = radius + 20;
+                const lx = cx + labelR * Math.cos(angle);
+                const ly = cy + labelR * Math.sin(angle);
+                ctx.fillStyle = '#5c5045';
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labels[i], lx, ly);
+                const valR = radius + 34;
+                const vx = cx + valR * Math.cos(angle);
+                const vy = cy + valR * Math.sin(angle);
+                ctx.fillStyle = '#887a6e';
+                ctx.font = '10px sans-serif';
+                ctx.fillText(values[i], vx, vy);
+            }
+        };
+    </script>
+
+</body>
+</html>

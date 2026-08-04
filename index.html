@@ -2,51 +2,142 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>守夜人 · 完整结果页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>哨向测试 · 塔内身份</title>
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ===== 全局重置 ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
             font-weight: 400;
             padding: 2rem 1.5rem;
-            background: #1a1a2e;
-            background-image: url('https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%83%8C%E6%99%AF.png');
-            background-size: cover;
+            background-color: #d6cbb8;
+            background-image: url('https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%A1%94.svg');
+            background-size: 500px auto;
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(214, 203, 184, 0.35);
+            z-index: 0;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 560px;
             width: 100%;
             background: rgba(230, 218, 201, 0.92);
-            border-radius: 24px;
-            padding: 2rem 2rem 1.8rem;
+            padding: 2.8rem 2rem 2.4rem;
             border: 1px solid #b8954a;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            border-radius: 0;
         }
 
-        .title-row {
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ================================================================
+           封面页
+           ================================================================ */
+        .cover-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #5a4a3a;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .cover-title .en {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 18px;
+            font-weight: 400;
+            color: #8b7355;
+            letter-spacing: 4px;
+            display: block;
+            margin-top: 2px;
+        }
+        .cover-text {
+            font-size: 16px;
+            line-height: 2;
+            color: #2e2922;
+            margin: 20px 0 24px;
+            text-align: left;
+            padding: 0 4px;
+        }
+        .cover-text .highlight { color: #5a4a3a; font-weight: 700; }
+        .cover-text .ellipsis { color: #5a4a3a; font-weight: 700; }
+        .cover-text .last-line {
+            margin-top: 12px;
+            text-align: right;
+            font-style: italic;
+            color: #5a4a3a;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.4;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .tower-icon {
+            text-align: center;
+            margin: 6px 0 22px;
+        }
+        .tower-icon img {
+            width: 500px;
+            max-width: 100%;
+            height: auto;
+            opacity: 0.85;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #8b7a6a;
+            color: #f5efe8;
+            border: none;
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Noto Serif SC', serif;
+            text-align: center;
+            border-radius: 0;
+        }
+        .btn:hover {
+            background: #7a6a5a;
+            transform: scale(1.01);
+        }
+
+        /* ================================================================
+           问卷页
+           ================================================================ */
+        /* 第1行：标题 + 装饰线 */
+        .quiz-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 4px;
         }
-        .title-row .title-text {
+        .quiz-header .title-text {
             font-size: 18px;
             font-weight: 400;
             color: #5a4a3a;
@@ -54,47 +145,304 @@
             letter-spacing: 2px;
             white-space: nowrap;
         }
-        .title-row .line-full {
+        .quiz-header .line-full {
+            flex: 1;
+            height: 1px;
+            background: #5a4a3a;
+            margin-left: 16px;
+        }
+
+        /* 第2行：装饰线 */
+        .quiz-line-two-wrap {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 14px;
+        }
+        .quiz-line-two {
+            width: 66.666%;
+            height: 1px;
+            background: #5a4a3a;
+        }
+
+        /* 进度行：进度条 + 数字 */
+        .quiz-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .quiz-progress-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(200, 180, 160, 0.4);
+            border-radius: 0;
+            overflow: hidden;
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #5a4a3a;
+            border-radius: 0;
+            transition: width 0.3s ease;
+        }
+        .quiz-progress-num {
+            font-size: 14px;
+            color: #8a7a6a;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .q-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e2922;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            padding: 10px 14px;
+            background: rgba(255, 248, 240, 0.5);
+            border: 1px solid rgba(100, 70, 40, 0.15);
+            cursor: pointer;
+            font-size: 15px;
+            color: #2e2922;
+            transition: 0.2s;
+            text-align: left;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            border-radius: 0;
+        }
+        .option-btn:hover {
+            background: rgba(255, 248, 240, 0.8);
+            border-color: #b8954a;
+        }
+        .option-btn.selected {
+            background: #d4c4b0;
+            border-color: #5a4a3a;
+        }
+        .q-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .q-nav .btn-sm {
+            padding: 10px 20px;
+            background: #8b7a6a;
+            color: #f5efe8;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Noto Serif SC', serif;
+            border-radius: 0;
+            flex: 1;
+        }
+        .q-nav .btn-sm:hover { background: #7a6a5a; }
+        .q-nav .btn-sm:disabled { opacity: 0.3; cursor: not-allowed; }
+        .q-nav .btn-sm.secondary {
+            background: transparent;
+            color: #5a4a3a;
+            border: 1px solid #b8954a;
+        }
+        .q-nav .btn-sm.secondary:hover { background: rgba(255, 248, 240, 0.5); }
+
+        /* ================================================================
+           卡牌翻转页
+           ================================================================ */
+        .card-page-header {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .card-page-header .cn {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #5a4a3a;
+            letter-spacing: 8px;
+            display: block;
+        }
+        .card-page-header .en {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: #5a4a3a;
+            letter-spacing: 4px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .card-scene {
+            perspective: 1200px;
+            margin: 10px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .card-flipper {
+            width: 340px;
+            height: 460px;
+            position: relative;
+            transition: transform 1s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .card-flipper.flipped {
+            transform: rotateY(360deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border: 2px solid #b8954a;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #2e2922;
+        }
+        .card-face.front {
+            background: #3a322a;
+            padding: 0;
+        }
+        .card-face.front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .card-face.front .card-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 4px 14px;
+            font-size: 12px;
+            color: #e6dac9;
+            letter-spacing: 2px;
+            border: 1px solid rgba(184, 149, 74, 0.3);
+            pointer-events: none;
+            font-family: 'Noto Serif SC', serif;
+            white-space: nowrap;
+        }
+        .card-face.back {
+            transform: rotateY(180deg);
+            background: #2e2922;
+            background-image: radial-gradient(circle at 30% 40%, #4a3a2a 1px, transparent 1px), radial-gradient(circle at 70% 60%, #4a3a2a 1px, transparent 1px);
+            background-size: 40px 40px;
+            border-color: #b8954a;
+        }
+        .card-face.back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .card-face.back .card-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 4px 14px;
+            font-size: 12px;
+            color: #e6dac9;
+            letter-spacing: 2px;
+            border: 1px solid rgba(184, 149, 74, 0.3);
+            pointer-events: none;
+            font-family: 'Noto Serif SC', serif;
+            white-space: nowrap;
+        }
+        @media (max-width: 420px) {
+            .card-flipper { width: 280px; height: 380px; }
+            .card-page-header .cn { font-size: 24px; letter-spacing: 4px; }
+            .card-page-header .en { font-size: 24px; }
+        }
+
+        .btn-show-result {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 14px auto 0;
+            padding: 12px 0;
+            background: #8b7a6a;
+            color: #f5efe8;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: background 0.2s;
+        }
+        .btn-show-result:hover { background: #7a6a5a; }
+
+        /* ================================================================
+           结果页
+           ================================================================ */
+        .result-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .result-title-row .title-text {
+            font-size: 18px;
+            font-weight: 400;
+            color: #5a4a3a;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+        .result-title-row .line-full {
             flex: 1;
             height: 1.5px;
             background: #5a4a3a;
             margin-left: 16px;
         }
-
-        .line-two-wrap {
+        .result-line-two-wrap {
             display: flex;
             justify-content: flex-start;
             margin-bottom: 10px;
         }
-        .line-two {
+        .result-line-two {
             width: 66.666%;
             height: 1.5px;
             background: #5a4a3a;
         }
-
-        .brown-title-box {
+        .result-brown-title-box {
             display: inline-block;
             background: #5a4a3a;
             padding: 4px 14px;
             margin-bottom: 14px;
             border-radius: 0;
         }
-        .brown-title-box span {
+        .result-brown-title-box span {
             font-family: 'Noto Serif SC', serif;
             font-size: 20px;
             font-weight: 400;
             color: #f5efe8;
             letter-spacing: 4px;
         }
-        .title-box-wrap {
-            text-align: center;
-        }
+        .result-title-box-wrap { text-align: center; }
 
-        .name-section {
+        .result-name-section {
             text-align: center;
             margin-bottom: 6px;
         }
-        .name-section .en {
+        .result-name-section .en {
             font-family: 'Uncial Antiqua', serif;
             font-size: 48px;
             font-weight: 400;
@@ -103,7 +451,7 @@
             display: block;
             margin-bottom: 2px;
         }
-        .name-section .cn {
+        .result-name-section .cn {
             font-family: 'Noto Serif SC', serif;
             font-size: 48px;
             font-weight: 700;
@@ -111,8 +459,12 @@
             letter-spacing: 12px;
             display: block;
         }
+        @media (max-width: 420px) {
+            .result-name-section .en { font-size: 32px; }
+            .result-name-section .cn { font-size: 32px; letter-spacing: 8px; }
+        }
 
-        .frame-quote {
+        .result-frame-quote {
             background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 16px 20px;
@@ -120,7 +472,7 @@
             text-align: center;
             border: 1px solid rgba(100, 70, 40, 0.15);
         }
-        .frame-quote p {
+        .result-frame-quote p {
             color: #2e2922;
             font-size: 22px;
             line-height: 1.8;
@@ -129,8 +481,11 @@
             letter-spacing: 1px;
             font-family: 'Noto Serif SC', serif;
         }
+        @media (max-width: 420px) {
+            .result-frame-quote p { font-size: 18px; }
+        }
 
-        .frame-analysis {
+        .result-frame-analysis {
             background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
@@ -142,32 +497,29 @@
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .frame-analysis .label {
-            font-weight: 400;
-            color: #4a3a2a;
-        }
+        .result-frame-analysis .label { font-weight: 400; color: #4a3a2a; }
 
-        .info-row {
+        .result-info-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 14px;
         }
-        .info-card {
+        .result-info-card {
             background: rgba(255, 248, 240, 0.5);
             border-radius: 0;
             padding: 10px 12px;
             border: 1px solid rgba(100, 70, 40, 0.15);
             text-align: center;
         }
-        .info-card .label {
+        .result-info-card .label {
             font-size: 13px;
             color: #776b5e;
             letter-spacing: 1px;
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .info-card .value {
+        .result-info-card .value {
             font-size: 18px;
             font-weight: 400;
             color: #2e2922;
@@ -175,7 +527,7 @@
             font-family: 'Noto Serif SC', serif;
         }
 
-        .frame-dept {
+        .result-frame-dept {
             background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
@@ -184,20 +536,19 @@
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .frame-dept .dept-name {
+        .result-frame-dept .dept-name {
             font-size: 18px;
             font-weight: 400;
             color: #2e2922;
         }
-        .frame-dept .dept-comment {
+        .result-frame-dept .dept-comment {
             margin-top: 6px;
             font-size: 16px;
             color: #4a3a2a;
             font-style: italic;
         }
 
-        /* 精神体框 */
-        .frame-spirit {
+        .result-frame-spirit {
             background: rgba(255, 248, 240, 0.6);
             border: 1px solid rgba(100, 70, 40, 0.15);
             border-radius: 0;
@@ -205,14 +556,12 @@
             font-family: 'Noto Serif SC', serif;
             margin-bottom: 14px;
         }
-
-        .spirit-top {
+        .result-spirit-top {
             display: flex;
             align-items: stretch;
             min-height: 100px;
         }
-
-        .spirit-left {
+        .result-spirit-left {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -221,51 +570,55 @@
             padding: 14px 12px;
             border-right: 3px solid rgba(100, 70, 40, 0.25);
         }
-
-        .spirit-left .label {
+        .result-spirit-left .label {
             font-size: 14px;
             color: #776b5e;
             letter-spacing: 2px;
             font-weight: 400;
         }
-
-        .spirit-left .name {
+        .result-spirit-left .name {
             font-size: 18px;
             color: #2e2922;
             font-weight: 400;
             margin-top: 2px;
         }
-
-        .spirit-right {
+        .result-spirit-right {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 14px 12px;
         }
-
-        .spirit-right img {
+        .result-spirit-right img {
             width: 104px;
             height: 104px;
             display: block;
             opacity: 0.85;
+            object-fit: contain;
         }
-
-        .spirit-bottom {
+        .result-spirit-bottom {
             padding: 14px 20px;
             border-top: 3px solid rgba(100, 70, 40, 0.25);
         }
-
-        .spirit-bottom p {
+        .result-spirit-bottom p {
             font-size: 16px;
             line-height: 1.8;
             color: #2e2922;
             font-weight: 400;
             margin: 0;
+            font-family: 'Noto Serif SC', serif;
+        }
+        @media (max-width: 420px) {
+            .result-spirit-right img { width: 80px; height: 80px; }
+            .result-spirit-top { min-height: 80px; }
+            .result-spirit-bottom { padding: 10px 16px; }
+            .result-spirit-bottom p { font-size: 14px; }
+            .result-spirit-left { border-right-width: 2px; }
+            .result-spirit-bottom { border-top-width: 2px; }
+            .result-spirit-left .name { font-size: 16px; }
         }
 
-        /* 精神体好感度框 */
-        .frame-bond {
+        .result-frame-bond {
             background: rgba(255, 248, 240, 0.6);
             border: 1px solid rgba(100, 70, 40, 0.15);
             border-radius: 0;
@@ -275,22 +628,14 @@
             align-items: center;
             gap: 20px;
         }
-
-        .bond-circle {
+        .result-bond-circle {
             width: 80px;
             height: 80px;
             flex-shrink: 0;
         }
-        .bond-circle svg {
-            width: 100%;
-            height: 100%;
-        }
-        .bond-circle .bg {
-            fill: none;
-            stroke: #ddd4c4;
-            stroke-width: 6;
-        }
-        .bond-circle .progress {
+        .result-bond-circle svg { width: 100%; height: 100%; }
+        .result-bond-circle .bg { fill: none; stroke: #ddd4c4; stroke-width: 6; }
+        .result-bond-circle .progress {
             fill: none;
             stroke: #7a8b9e;
             stroke-width: 6;
@@ -300,27 +645,30 @@
             transform-origin: 40px 40px;
             transform: rotate(90deg);
         }
-        .bond-circle .center-text {
+        .result-bond-circle .center-text {
             fill: #332a22;
             font-size: 18px;
             font-weight: 400;
             font-family: 'Noto Serif SC', serif;
         }
-        .bond-label {
+        .result-bond-label {
             font-size: 16px;
             color: #5f5549;
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
+        @media (max-width: 420px) {
+            .result-frame-bond { flex-direction: column; align-items: center; gap: 8px; }
+        }
 
-        .stats-wrap {
+        .result-stats-wrap {
             background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
             border: 1px solid rgba(100, 70, 40, 0.15);
             margin-bottom: 14px;
         }
-        .stats-wrap .stats-title {
+        .result-stats-wrap .stats-title {
             font-size: 16px;
             color: #5f5549;
             letter-spacing: 2px;
@@ -329,29 +677,29 @@
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-
-        .radar-container {
+        .result-radar-box {
+            background: rgba(255, 248, 240, 0.3);
+            border: 1px solid rgba(100, 70, 40, 0.1);
+            border-radius: 0;
+            padding: 10px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 12px;
         }
-        #radarChart {
-            width: 220px;
-            height: 220px;
-            display: block;
+        #resultRadarChart { width: 220px; height: 220px; display: block; }
+        @media (max-width: 420px) {
+            #resultRadarChart { width: 180px; height: 180px; }
         }
 
-        .stat-row {
+        .result-stat-row {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 6px;
         }
-        .stat-row:last-child {
-            margin-bottom: 0;
-        }
-        .stat-row .stat-label {
+        .result-stat-row:last-child { margin-bottom: 0; }
+        .result-stat-row .stat-label {
             width: 70px;
             font-size: 14px;
             color: #4a3a2a;
@@ -360,21 +708,21 @@
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .stat-row .stat-track {
+        .result-stat-row .stat-track {
             flex: 1;
             height: 14px;
             background: rgba(200, 180, 160, 0.4);
-            border-radius: 999px;
+            border-radius: 0;
             overflow: hidden;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
         }
-        .stat-row .stat-track .stat-fill {
+        .result-stat-row .stat-track .stat-fill {
             height: 100%;
-            border-radius: 999px;
+            border-radius: 0;
             width: 0%;
             transition: width 0.6s ease;
         }
-        .stat-row .stat-pct {
+        .result-stat-row .stat-pct {
             width: 44px;
             font-size: 14px;
             font-weight: 400;
@@ -383,8 +731,12 @@
             flex-shrink: 0;
             font-family: 'Noto Serif SC', serif;
         }
+        @media (max-width: 420px) {
+            .result-stat-row .stat-label { width: 56px; font-size: 12px; }
+            .result-stat-row .stat-pct { width: 36px; font-size: 12px; }
+        }
 
-        .frame-match {
+        .result-frame-match {
             background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
@@ -397,7 +749,112 @@
             font-family: 'Noto Serif SC', serif;
         }
 
-        .footer {
+        /* ================================================================
+           身份牌画廊
+           ================================================================ */
+        .gallery-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 0;
+            background: rgba(255, 248, 240, 0.6);
+            border: 1px solid #b8954a;
+            cursor: pointer;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            color: #3a312a;
+            transition: background 0.2s;
+            margin-top: 2px;
+        }
+        .gallery-toggle:hover { background: rgba(255, 248, 240, 0.85); }
+        .gallery-toggle .arrow {
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        .gallery-toggle .arrow.open { transform: rotate(180deg); }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 12px 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease, padding 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .gallery-grid.open {
+            max-height: 3000px;
+            padding: 12px 0;
+            opacity: 1;
+        }
+
+        .mini-card {
+            background: rgba(255, 248, 240, 0.7);
+            border: 1.5px solid #b8954a;
+            border-radius: 8px;
+            padding: 12px 6px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            min-height: 130px;
+        }
+        .mini-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+        }
+        .mini-card .mini-spirit {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        .mini-card .mini-spirit svg {
+            width: 100%;
+            height: 100%;
+        }
+        .mini-card .mini-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #2e2922;
+            margin-top: 2px;
+        }
+        .mini-card .mini-en {
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 11px;
+            color: #776b5e;
+            letter-spacing: 0.5px;
+        }
+        .mini-card.pop {
+            animation: cardPop 0.4s ease;
+        }
+        @keyframes cardPop {
+            0% { transform: scale(1); }
+            25% { transform: scale(0.92); }
+            55% { transform: scale(1.06); }
+            80% { transform: scale(0.98); }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 520px) {
+            .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 400px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .mini-card { min-height: 110px; padding: 8px 4px; }
+            .mini-card .mini-spirit { width: 50px; height: 50px; }
+            .mini-card .mini-name { font-size: 14px; }
+            .mini-card .mini-en { font-size: 10px; }
+        }
+
+        .result-footer {
             text-align: center;
             font-size: 14px;
             color: #6b6055;
@@ -407,13 +864,13 @@
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .footer a {
+        .result-footer a {
             color: #7e6e5c;
             text-decoration: none;
             border-bottom: 1px dotted #7e6e5c;
         }
 
-        .restart-btn {
+        .result-restart-btn {
             margin-top: 14px;
             width: 100%;
             padding: 12px;
@@ -428,210 +885,803 @@
             font-family: 'Noto Serif SC', serif;
             letter-spacing: 2px;
         }
-        .restart-btn:hover {
+        .result-restart-btn:hover {
             background: rgba(200, 180, 160, 0.3);
             border-color: rgba(100, 70, 40, 0.5);
         }
 
         @media (max-width: 420px) {
-            .container {
-                padding: 1.2rem 1rem;
-            }
-            .name-section .en {
-                font-size: 32px;
-            }
-            .name-section .cn {
-                font-size: 32px;
-                letter-spacing: 8px;
-            }
-            .frame-quote p {
-                font-size: 18px;
-            }
-            .stat-row .stat-label {
-                width: 56px;
-                font-size: 12px;
-            }
-            .stat-row .stat-pct {
-                width: 36px;
-                font-size: 12px;
-            }
-            #radarChart {
-                width: 180px;
-                height: 180px;
-            }
-            .spirit-left .name {
-                font-size: 16px;
-            }
-            .spirit-right img {
-                width: 80px;
-                height: 80px;
-            }
-            .spirit-top {
-                min-height: 80px;
-            }
-            .spirit-bottom {
-                padding: 10px 16px;
-            }
-            .spirit-bottom p {
-                font-size: 14px;
-            }
-            .spirit-left {
-                border-right-width: 2px;
-            }
-            .spirit-bottom {
-                border-top-width: 2px;
-            }
-            .frame-bond {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
+            .container { padding: 1.2rem 1rem; }
+            .cover-title { font-size: 26px; }
+            .cover-title .en { font-size: 15px; }
+            .cover-text .last-line { font-size: 24px; }
+            .q-text { font-size: 16px; }
+            .option-btn { font-size: 14px; padding: 8px 12px; }
+            .quiz-header .title-text { font-size: 16px; }
+            .quiz-progress-num { font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="app">
 
-    <!-- 标题区 -->
-    <div class="title-row">
-        <span class="title-text">哨向测试</span>
-        <span class="line-full"></span>
-    </div>
-    <div class="line-two-wrap">
-        <span class="line-two"></span>
-    </div>
-
-    <!-- 棕色框标题 -->
-    <div class="title-box-wrap">
-        <div class="brown-title-box">
-            <span>你的哨向身份牌</span>
+    <!-- ================================================================
+    封面页
+    ================================================================ -->
+    <div class="page active" id="pageCover">
+        <div class="cover-title">
+            你的哨向身份是什么？
+            <span class="en">WHAT IS YOUR SENTINEL IDENTITY?</span>
         </div>
-    </div>
 
-    <!-- 英文 + 中文 -->
-    <div class="name-section">
-        <span class="en">SENTINEL</span>
-        <span class="cn">守夜人</span>
-    </div>
-
-    <!-- 名言框 -->
-    <div class="frame-quote">
-        <p>“黑夜是我的领地，我知道危险会在哪里出现，也知道我该站在哪里等它。”</p>
-    </div>
-
-    <!-- 解析框 -->
-    <div class="frame-analysis">
-        <span class="label">解析：</span><br />
-        你是守夜人，一座孤岛，不属于任何热闹。<br />
-        塔里的人日常训练、吃饭、按照塔内要求进行匹配，你觉得没任何必要。你基本上都在独处。食堂你挑人少的角落坐，训练场你挑没人的时段用，宿舍你申请了单间，上面批了你的申请，指挥官也懒得管你。你擅长捕捉风声，不论是环境的微妙变化，还是局势中尚未可知的风险，都逃不过你的眼睛。你不会轻易暴露底牌或分享情绪，没人知道你的精神体长什么样。<br />
-        沉默挡住了窥探，也省去了辩驳的消耗。
-    </div>
-
-    <!-- 属性行 -->
-    <div class="info-row">
-        <div class="info-card">
-            <div class="label">塔内阶层</div>
-            <div class="value">中层</div>
+        <div class="cover-text">
+            你好，陌生人。<br />在塔里，我们拥有四大阵营，<span class="highlight">哨兵</span>、<span class="highlight">向导</span>、<span class="highlight">双向</span>和<span class="highlight">实验体</span>。<br />
+            哨兵拥有敏锐的感官却容易五感失调，极易暴走；<br />
+            向导拥有疏导精神的力量，数量很少；<br />
+            双向哨兵和向导是极少数能自洽的存在；<br />
+            而实验体……<br /><span class="ellipsis">没人知道塔研究来做什么</span>。<br />
+            <span class="last-line">塔说，<br />“欢迎来到哨向世界。”</span>
         </div>
-        <div class="info-card">
-            <div class="label">级别</div>
-            <div class="value">A</div>
+
+        <div class="tower-icon">
+            <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%A1%94.svg" />
         </div>
+
+        <button class="btn" id="btnStart">开始测试</button>
     </div>
 
-    <!-- 部门框 -->
-    <div class="frame-dept">
-        <div class="dept-name">所属部门       后勤部</div>
-        <div class="dept-comment">“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”</div>
-    </div>
+    <!-- ================================================================
+    问卷页
+    ================================================================ -->
+    <div class="page" id="pageQuiz">
+        <!-- 第1行：标题 + 装饰线（到底） -->
+        <div class="quiz-header">
+            <span class="title-text">你的哨向身份是什么？</span>
+            <span class="line-full"></span>
+        </div>
+        <!-- 第2行：装饰线（到2/3处） -->
+        <div class="quiz-line-two-wrap">
+            <span class="quiz-line-two"></span>
+        </div>
 
-    <!-- 精神体框 -->
-    <div class="frame-spirit">
-        <div class="spirit-top">
-            <div class="spirit-left">
-                <span class="label">精神体</span>
-                <span class="name">猞猁</span>
+        <!-- 进度行：进度条 + 数字 -->
+        <div class="quiz-progress-row">
+            <div class="quiz-progress-track">
+                <div class="quiz-progress-fill" id="progressFill" style="width:0%;"></div>
             </div>
-            <div class="spirit-right">
-                <img src="file:///C:/Users/suu/Desktop/%E5%93%A8%E5%93%8D%E6%B5%8B%E8%AF%95/%E5%93%A8%E5%85%B5/%E7%8C%9E%E7%8C%81.svg" alt="猞猁" />
+            <span class="quiz-progress-num" id="qCounter">1 / 15</span>
+        </div>
+
+        <div class="q-text" id="qText">加载中…</div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="q-nav">
+            <button class="btn-sm secondary" id="btnPrev">← 上一题</button>
+            <button class="btn-sm" id="btnNext">下一题 →</button>
+        </div>
+    </div>
+
+    <!-- ================================================================
+    卡牌翻转页
+    ================================================================ -->
+    <div class="page" id="pageCard">
+        <div class="card-page-header">
+            <span class="cn" id="cardPageCn">戍卫</span>
+            <span class="en" id="cardPageEn">SENTINEL</span>
+        </div>
+
+        <div class="card-scene">
+            <div class="card-flipper" id="cardFlipper">
+                <div class="card-face front" id="cardFront">
+                    <img id="cardFrontImg" src="" alt="卡牌正面" />
+                </div>
+                <div class="card-face back">
+                    <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8D%A1%E8%83%8C.jpg" alt="卡牌背面" />
+                    <div class="card-badge">✦ 卡背</div>
+                </div>
             </div>
         </div>
-        <div class="spirit-bottom">
-            <p>
-                猞猁是一种极为机警、孤傲的精神体。在猞猁眼里，主人是一个值得尊敬的同居者。它会对主人产生轻微依赖，比如每天在房门口等你。等到你时，它会轻轻蹭一下你的腿，用气味把你纳入它的安全领地之内。<br /><br />
-                除此之外，它很少靠近主人，但在危机来临之前，它会立马挡在你身前。在战斗状态下，猞猁不会发出任何惊动对方的声音。它会不停地观察，在对手暴露破绽的那一瞬间伺机而动，一击即中。
-            </p>
-        </div>
+        <button class="btn-show-result" id="btnShowResult">查看完整身份 →</button>
     </div>
 
-    <!-- 精神体好感度框 -->
-    <div class="frame-bond">
-        <div class="bond-circle">
-            <svg viewBox="0 0 80 80">
-                <circle class="bg" cx="40" cy="40" r="36" />
-                <circle class="progress" cx="40" cy="40" r="36" />
-                <text x="40" y="45" text-anchor="middle" font-size="18" font-weight="400" fill="#332a22" font-family="'Noto Serif SC',serif">80%</text>
-            </svg>
+    <!-- ================================================================
+    结果页
+    ================================================================ -->
+    <div class="page" id="pageResult">
+        <div class="result-title-row">
+            <span class="title-text">哨向测试</span>
+            <span class="line-full"></span>
         </div>
-        <span class="bond-label">精神体好感度</span>
-    </div>
+        <div class="result-line-two-wrap">
+            <span class="result-line-two"></span>
+        </div>
 
-    <!-- 六维能力 -->
-    <div class="stats-wrap">
-        <div class="stats-title">战力六维解析图</div>
-        <div class="radar-container">
-            <canvas id="radarChart" width="220" height="220"></canvas>
+        <div class="result-title-box-wrap">
+            <div class="result-brown-title-box">
+                <span>你的哨向身份牌</span>
+            </div>
         </div>
-        <div class="stat-row">
-            <span class="stat-label">战力</span>
-            <div class="stat-track"><div class="stat-fill" style="width:60%; background:#b8544a;"></div></div>
-            <span class="stat-pct">60%</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">共情力</span>
-            <div class="stat-track"><div class="stat-fill" style="width:40%; background:#6a8a9e;"></div></div>
-            <span class="stat-pct">40%</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">稳定性</span>
-            <div class="stat-track"><div class="stat-fill" style="width:80%; background:#6a7a4a;"></div></div>
-            <span class="stat-pct">80%</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">意志力</span>
-            <div class="stat-track"><div class="stat-fill" style="width:80%; background:#b8954a;"></div></div>
-            <span class="stat-pct">80%</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">协同程度</span>
-            <div class="stat-track"><div class="stat-fill" style="width:20%; background:#8a7a9e;"></div></div>
-            <span class="stat-pct">20%</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">不可预测性</span>
-            <div class="stat-track"><div class="stat-fill" style="width:60%; background:#3a6a8a;"></div></div>
-            <span class="stat-pct">60%</span>
-        </div>
-    </div>
 
-    <!-- 哨向匹配度 -->
-    <div class="frame-match">
-        哨向匹配度：需特定向导
-    </div>
+        <div class="result-name-section">
+            <span class="en" id="resultEn">SENTINEL</span>
+            <span class="cn" id="resultCn">守夜人</span>
+        </div>
 
-    <!-- 底部 -->
-    <div class="footer">
-        ✦ 测试制作 · <a href="#">@柯基胖屁屁</a><br />
-        <span style="font-size:13px; color:#766a5e;">更多测试 · OC设定 · 哨向世界</span>
+        <div class="result-frame-quote">
+            <p id="resultQuote">“黑夜是我的领地，我知道危险会在哪里出现，<br />也知道我该站在哪里等它。”</p>
+        </div>
+
+        <div class="result-frame-analysis">
+            <span class="label">解析：</span><br />
+            <span id="resultAnalysis">你是守夜人，一座孤岛，不属于任何热闹……</span>
+        </div>
+
+        <div class="result-info-row">
+            <div class="result-info-card">
+                <div class="label">塔内阶层</div>
+                <div class="value" id="resultLevel">中层</div>
+            </div>
+            <div class="result-info-card">
+                <div class="label">级别</div>
+                <div class="value" id="resultGrade">A</div>
+            </div>
+        </div>
+
+        <div class="result-frame-dept">
+            <div class="dept-name" id="resultDept">所属部门：后勤部</div>
+            <div class="dept-comment" id="resultDeptComment">“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”</div>
+        </div>
+
+        <div class="result-frame-spirit">
+            <div class="result-spirit-top">
+                <div class="result-spirit-left">
+                    <span class="label">精神体</span>
+                    <span class="name" id="resultSpiritName">猞猁</span>
+                </div>
+                <div class="result-spirit-right">
+                    <img id="resultSpiritImg" src="" alt="精神体" />
+                </div>
+            </div>
+            <div class="result-spirit-bottom">
+                <p id="resultSpiritDesc">猞猁是一种极为机警、孤傲的精神体……</p>
+            </div>
+        </div>
+
+        <div class="result-frame-bond">
+            <div class="result-bond-circle">
+                <svg viewBox="0 0 80 80">
+                    <circle class="bg" cx="40" cy="40" r="36" />
+                    <circle class="progress" cx="40" cy="40" r="36" />
+                    <text class="center-text" id="bondText" x="40" y="45">80%</text>
+                </svg>
+            </div>
+            <span class="result-bond-label">精神体好感度（自洽度）</span>
+        </div>
+
+        <div class="result-stats-wrap">
+            <div class="stats-title">◈ 六维能力</div>
+            <div class="result-radar-box">
+                <canvas id="resultRadarChart" width="220" height="220"></canvas>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">战力</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill1" style="width:60%; background:#b8544a;"></div></div>
+                <span class="stat-pct" id="statPct1">60%</span>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">共情力</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill2" style="width:40%; background:#6a8a9e;"></div></div>
+                <span class="stat-pct" id="statPct2">40%</span>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">稳定性</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill3" style="width:80%; background:#6a7a4a;"></div></div>
+                <span class="stat-pct" id="statPct3">80%</span>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">意志力</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill4" style="width:80%; background:#b8954a;"></div></div>
+                <span class="stat-pct" id="statPct4">80%</span>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">协同程度</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill5" style="width:20%; background:#8a7a9e;"></div></div>
+                <span class="stat-pct" id="statPct5">20%</span>
+            </div>
+            <div class="result-stat-row">
+                <span class="stat-label">不可预测性</span>
+                <div class="stat-track"><div class="stat-fill" id="statFill6" style="width:60%; background:#3a6a8a;"></div></div>
+                <span class="stat-pct" id="statPct6">60%</span>
+            </div>
+        </div>
+
+        <div class="result-frame-match" id="resultMatch">
+            哨向匹配度：需特定向导
+        </div>
+
+        <!-- 身份牌画廊 -->
+        <div style="margin-top:6px;">
+            <div class="gallery-toggle" id="galleryToggle">
+                <span>📜 点击查看所有身份牌</span>
+                <span class="arrow" id="galleryArrow">▼</span>
+            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+
+        <div class="result-footer">
+            ✦ 测试制作 · <a href="#">@柯基胖屁屁</a><br />
+            <span style="font-size:13px; color:#766a5e;">更多测试 · OC设定 · 哨向世界</span>
+        </div>
+        <button class="result-restart-btn" id="btnRestart">↻ 重新测试</button>
     </div>
-    <button class="restart-btn">↻ 重新测试</button>
 
 </div>
 
 <script>
-    window.onload = function() {
-        const canvas = document.getElementById('radarChart');
+    // ================================================================
+    // 精神体SVG（身份画廊专用）
+    // ================================================================
+    function getSpiritSVG(name) {
+        const map = {
+            '战马': `<svg viewBox="0 0 104 104"><path d="M20 70 Q30 30 50 25 Q60 22 70 30 Q80 38 82 50 Q84 60 78 70 Q72 80 60 82 Q50 84 40 80 Q30 76 20 70 Z" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1.5"/><path d="M50 25 Q48 15 45 10 Q42 8 40 12 Q38 16 42 20" stroke="#5a4a3a" stroke-width="1.5" fill="none"/><path d="M55 18 Q60 12 62 8 Q64 6 66 10 Q68 14 62 20" stroke="#5a4a3a" stroke-width="1.5" fill="none"/><circle cx="58" cy="38" r="3" fill="#2e2922"/><circle cx="68" cy="42" r="3" fill="#2e2922"/><path d="M30 70 Q40 80 60 78 Q70 76 76 68" stroke="#5a4a3a" stroke-width="1.2" fill="none"/></svg>`,
+            '猞猁': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="60" rx="28" ry="22" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1.5"/><circle cx="52" cy="44" r="18" fill="#a08a7a" stroke="#5a4a3a" stroke-width="1.5"/><polygon points="38,30 34,18 42,28" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1"/><polygon points="66,30 70,18 62,28" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1"/><circle cx="44" cy="40" r="4" fill="#2e2922"/><circle cx="60" cy="40" r="4" fill="#2e2922"/><path d="M46 48 Q52 54 58 48" stroke="#2e2922" stroke-width="1.5" fill="none"/><path d="M30 68 Q40 80 64 78 Q76 76 78 64" stroke="#5a4a3a" stroke-width="1.2" fill="none"/></svg>`,
+            '狼': `<svg viewBox="0 0 104 104"><path d="M52 20 L40 35 L30 30 L38 42 L32 52 L44 48 L48 58 L52 65 L56 58 L60 48 L72 52 L66 42 L74 30 L64 35 L52 20 Z" fill="#6a5a4a" stroke="#5a4a3a" stroke-width="1.5"/><polygon points="40,35 38,28 44,34" fill="#6a5a4a" stroke="#5a4a3a" stroke-width="1"/><polygon points="64,35 66,28 60,34" fill="#6a5a4a" stroke="#5a4a3a" stroke-width="1"/><circle cx="46" cy="42" r="3" fill="#b8954a"/><circle cx="58" cy="42" r="3" fill="#b8954a"/><path d="M48 52 Q52 56 56 52" stroke="#2e2922" stroke-width="1.5" fill="none"/></svg>`,
+            '鲸': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="50" rx="40" ry="22" fill="#6a8a9e" stroke="#4a6a7e" stroke-width="1.5"/><path d="M88 46 Q98 40 94 52 Q92 60 88 56" fill="#6a8a9e" stroke="#4a6a7e" stroke-width="1.5"/><path d="M12 50 Q6 44 8 56 Q10 62 14 56" fill="#6a8a9e" stroke="#4a6a7e" stroke-width="1.5"/><circle cx="40" cy="44" r="4" fill="#2e2922"/><circle cx="52" cy="44" r="4" fill="#2e2922"/><path d="M42 54 Q50 62 58 54" stroke="#2e2922" stroke-width="1.2" fill="none"/></svg>`,
+            '章鱼': `<svg viewBox="0 0 104 104"><circle cx="52" cy="40" r="22" fill="#8a6a5a" stroke="#5a4a3a" stroke-width="1.5"/><path d="M44 60 Q38 78 34 88" stroke="#8a6a5a" stroke-width="3" fill="none"/><path d="M52 62 Q52 80 50 90" stroke="#8a6a5a" stroke-width="3" fill="none"/><path d="M60 60 Q66 78 70 88" stroke="#8a6a5a" stroke-width="3" fill="none"/><path d="M38 56 Q28 70 26 82" stroke="#8a6a5a" stroke-width="2.5" fill="none"/><path d="M66 56 Q76 70 78 82" stroke="#8a6a5a" stroke-width="2.5" fill="none"/><circle cx="44" cy="36" r="3" fill="#2e2922"/><circle cx="60" cy="36" r="3" fill="#2e2922"/></svg>`,
+            '蝙蝠': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="50" rx="12" ry="16" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.5"/><path d="M40 46 Q20 30 12 44 Q16 50 28 48 Q34 46 40 46" fill="#4a3a3a" stroke="#2e2922" stroke-width="1"/><path d="M64 46 Q84 30 92 44 Q88 50 76 48 Q70 46 64 46" fill="#4a3a3a" stroke="#2e2922" stroke-width="1"/><path d="M40 46 Q34 40 28 48" fill="#4a3a3a"/><path d="M64 46 Q70 40 76 48" fill="#4a3a3a"/><circle cx="46" cy="46" r="2" fill="#b8954a"/><circle cx="58" cy="46" r="2" fill="#b8954a"/></svg>`,
+            '鹿': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="64" rx="22" ry="18" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1.5"/><path d="M52 48 Q48 36 42 28 Q44 30 48 32 Q46 24 50 18 Q52 22 54 18 Q58 24 56 32 Q60 30 62 28 Q56 36 52 48" stroke="#5a4a3a" stroke-width="1.5" fill="none"/><circle cx="44" cy="46" r="3" fill="#2e2922"/><circle cx="60" cy="46" r="3" fill="#2e2922"/><path d="M46 54 Q52 60 58 54" stroke="#2e2922" stroke-width="1.2" fill="none"/></svg>`,
+            '猫头鹰': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="54" rx="24" ry="20" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="1.5"/><circle cx="44" cy="48" r="10" fill="#a08a7a" stroke="#5a4a3a" stroke-width="1"/><circle cx="60" cy="48" r="10" fill="#a08a7a" stroke="#5a4a3a" stroke-width="1"/><circle cx="44" cy="48" r="5" fill="#b8954a"/><circle cx="60" cy="48" r="5" fill="#b8954a"/><circle cx="44" cy="48" r="2" fill="#2e2922"/><circle cx="60" cy="48" r="2" fill="#2e2922"/><polygon points="44,34 40,26 48,32" fill="#8b7a6a"/><polygon points="60,34 64,26 56,32" fill="#8b7a6a"/><path d="M46 58 Q52 64 58 58" stroke="#2e2922" stroke-width="1.2" fill="none"/></svg>`,
+            '狐狸': `<svg viewBox="0 0 104 104"><path d="M52 30 L38 44 L28 40 L36 50 L30 60 L44 54 L50 64 L56 64 L60 54 L74 60 L68 50 L76 40 L66 44 L52 30 Z" fill="#b8954a" stroke="#8b7a4a" stroke-width="1.5"/><circle cx="46" cy="44" r="2.5" fill="#2e2922"/><circle cx="58" cy="44" r="2.5" fill="#2e2922"/><path d="M48 50 Q52 54 56 50" stroke="#2e2922" stroke-width="1" fill="none"/></svg>`,
+            '天鹅': `<svg viewBox="0 0 104 104"><path d="M52 70 Q40 64 36 54 Q32 44 38 38 Q44 32 50 36 Q56 40 52 48 Q48 56 52 60 Q56 56 60 48 Q64 40 70 44 Q76 48 72 58 Q68 68 56 72 Q52 74 52 70" fill="#e8e0d8" stroke="#b8954a" stroke-width="1.5"/><path d="M52 70 Q50 80 48 88 Q46 92 50 90 Q54 88 52 82" fill="#e8e0d8" stroke="#b8954a" stroke-width="1.2"/><circle cx="48" cy="46" r="2" fill="#2e2922"/></svg>`,
+            '乌龟': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="54" rx="30" ry="20" fill="#6a7a4a" stroke="#4a5a2a" stroke-width="1.5"/><path d="M52 34 Q48 28 44 30 Q40 32 42 38 Q44 44 52 44 Q60 44 62 38 Q64 32 60 30 Q56 28 52 34" stroke="#4a5a2a" stroke-width="1" fill="none"/><circle cx="44" cy="50" r="2" fill="#2e2922"/><circle cx="60" cy="50" r="2" fill="#2e2922"/><path d="M48 58 Q52 62 56 58" stroke="#2e2922" stroke-width="1" fill="none"/><ellipse cx="52" cy="72" rx="14" ry="8" fill="#6a7a4a" stroke="#4a5a2a" stroke-width="1.2"/></svg>`,
+            '秃鹫': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="56" rx="18" ry="14" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.5"/><path d="M34 48 Q18 30 12 42 Q16 48 24 46 Q30 44 34 48" fill="#4a3a3a" stroke="#2e2922" stroke-width="1"/><path d="M70 48 Q86 30 92 42 Q88 48 80 46 Q74 44 70 48" fill="#4a3a3a" stroke="#2e2922" stroke-width="1"/><circle cx="44" cy="52" r="2" fill="#b8954a"/><circle cx="60" cy="52" r="2" fill="#b8954a"/><path d="M48 60 L52 66 L56 60" stroke="#2e2922" stroke-width="1.2" fill="none"/><path d="M52 66 L50 74 L54 74 L52 66" fill="#b8954a"/></svg>`,
+            '黑豹': `<svg viewBox="0 0 104 104"><path d="M52 22 L42 34 L32 30 L40 42 L34 52 L46 48 L50 58 L54 58 L58 48 L70 52 L64 42 L72 30 L62 34 L52 22 Z" fill="#2e2922" stroke="#1a1a1a" stroke-width="1.5"/><circle cx="44" cy="40" r="2.5" fill="#b8954a"/><circle cx="60" cy="40" r="2.5" fill="#b8954a"/><path d="M46 48 Q52 54 58 48" stroke="#4a3a3a" stroke-width="1" fill="none"/></svg>`,
+            '蛇': `<svg viewBox="0 0 104 104"><path d="M52 22 Q40 30 36 40 Q32 50 38 58 Q44 66 52 62 Q60 58 62 48 Q64 38 56 32 Q48 26 52 22" fill="#6a7a4a" stroke="#4a5a2a" stroke-width="1.5"/><path d="M52 22 Q56 18 62 20 Q66 22 64 28" stroke="#4a5a2a" stroke-width="1.2" fill="none"/><circle cx="48" cy="40" r="2" fill="#2e2922"/><circle cx="56" cy="44" r="2" fill="#2e2922"/><path d="M44 52 L50 48 L54 52" stroke="#2e2922" stroke-width="1" fill="none"/></svg>`,
+            '三头犬': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="56" rx="24" ry="18" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.5"/><circle cx="36" cy="44" r="10" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.2"/><circle cx="52" cy="40" r="10" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.2"/><circle cx="68" cy="44" r="10" fill="#4a3a3a" stroke="#2e2922" stroke-width="1.2"/><circle cx="36" cy="44" r="4" fill="#b8544a"/><circle cx="52" cy="40" r="4" fill="#b8544a"/><circle cx="68" cy="44" r="4" fill="#b8544a"/><circle cx="36" cy="44" r="1.5" fill="#2e2922"/><circle cx="52" cy="40" r="1.5" fill="#2e2922"/><circle cx="68" cy="44" r="1.5" fill="#2e2922"/></svg>`,
+            '利维坦': `<svg viewBox="0 0 104 104"><ellipse cx="52" cy="50" rx="32" ry="20" fill="#3a5a7a" stroke="#2a4a6a" stroke-width="1.5"/><path d="M20 44 Q12 38 8 46 Q6 54 14 52 Q18 50 20 44" fill="#3a5a7a" stroke="#2a4a6a" stroke-width="1"/><path d="M84 44 Q92 38 96 46 Q98 54 90 52 Q86 50 84 44" fill="#3a5a7a" stroke="#2a4a6a" stroke-width="1"/><path d="M30 58 Q26 68 20 76" stroke="#3a5a7a" stroke-width="3" fill="none"/><path d="M52 60 Q52 72 48 80" stroke="#3a5a7a" stroke-width="3" fill="none"/><path d="M74 58 Q78 68 84 76" stroke="#3a5a7a" stroke-width="3" fill="none"/><circle cx="40" cy="46" r="3" fill="#6a8aae"/><circle cx="64" cy="46" r="3" fill="#6a8aae"/></svg>`
+        };
+        return map[name] || `<svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="30" fill="#8b7a6a" stroke="#5a4a3a" stroke-width="2"/><text x="52" y="58" text-anchor="middle" font-size="20" fill="#f5efe8">${name}</text></svg>`;
+    }
+
+    // ================================================================
+    // 1. 问卷数据（15题）
+    // ================================================================
+    const QUESTIONS = [
+        { text: '你是怎么来到这座塔的？', options: [{ label: '我主动来的。因为对这里充满了好奇，这里有我想探索的东西。', value: 'A' }, { label: '我不知道啊，我是被抓进来的。', value: 'B' }, { label: '因为有要守护的人，有必须完成的事。', value: 'C' }, { label: '我拥有危险的能力。能力太强或者太特别的东西，都会被塔盯上。', value: 'D' }] },
+        { text: '你认为塔的意志是什么？', options: [{ label: '维系秩序，所有人在规则之下各司其职，塔才能运转。', value: 'A' }, { label: '捍卫自由，塔存在的意义是让每个人都能走自己的路，不被束缚。', value: 'B' }, { label: '守护联结，塔是一张网，把所有人拴在一起，彼此支撑。', value: 'C' }, { label: '筛选强者，塔只需要有用的人，没能力的人不该占着位置。', value: 'D' }] },
+        { text: '你希望第一个来带你熟悉塔的人是什么样的？', options: [{ label: '魔鬼教官型。他语气严厉，嫌你动作慢，直接上手纠正，骂完继续让你重来。', value: 'A' }, { label: '人机导师型。他语调平静，一条一条列给你听，全是具体数据。', value: 'B' }, { label: '保姆型，很有耐心，做错了他就陪你再来一次。', value: 'C' }, { label: '老油条型。不教你标准的，只教你阴的。全是实战里磨出来的脏套路。', value: 'D' }] },
+        { text: '你觉得你在塔里适合做什么？', options: [{ label: '战斗与指挥。打前线、定方案、收集情报，反正和战场有关的事都行。', value: 'A' }, { label: '后勤与支持。管物资、做疏导、保障日常运转。', value: 'B' }, { label: '研究与实验。探索未知的东西，不计代价，没有禁忌。', value: 'C' }, { label: '塔外。我不属于塔，也不想被塔管。', value: 'D' }, { label: '记录与传承。把发生的一切记下来，让后人知道塔里曾经发生过什么。', value: 'E' }] },
+        { text: '你希望进入一个什么样的团队？', options: [{ label: '大家都是好兄弟，决策靠信任和默契。', value: 'A' }, { label: '沉默大佬1v100带飞，团队里嘻嘻哈哈干啥都行。', value: 'B' }, { label: '乐子人队伍，永远有新奇套路，战斗怎么能不玩呢！', value: 'C' }, { label: '资源顶级，训练和生活都要最好的。', value: 'D' }] },
+        { text: '你接受塔对你的职业和生活进行安排吗？', options: [{ label: '全部接受。塔怎么安排我就怎么做，塔的意志就是我的意志。', value: 'A' }, { label: '工作交给你安排没问题，但生活上我有自己的节奏。', value: 'B' }, { label: '生活上我都行，但工作上我想做我自己认准的事。', value: 'C' }, { label: '两边都不想被管，我的事我自己说了算。', value: 'D' }] },
+        { text: '你的精神图景更接近哪种颜色？', options: [{ label: '蓝色。独立的、冷静的，像一个游离在人群之外的观察者。', value: 'A' }, { label: '红色。压抑、蓄势、随时可能爆发。', value: 'B' }, { label: '绿色。生长、持续、温和而持久。', value: 'C' }, { label: '白色。混乱烧尽之后的归一、无差。', value: 'D' }] },
+        { text: '你觉得你和你的精神体之间的关系更像哪一种？', options: [{ label: '相互独立，各干各的。它有自己的节奏，我有我的事情。', value: 'A' }, { label: '我像在照顾它。它是我的责任，我会确保它稳定。', value: 'B' }, { label: '我驯服了它，我是它的主人。', value: 'C' }, { label: '它就是我。我的情绪就是它的情绪。', value: 'D' }] },
+        { text: '你一个人在房间里待着的时候，脑子里通常是什么状态？', options: [{ label: '很安静。没什么杂念，能放空，能真正休息。', value: 'A' }, { label: '在想事情。比如塔里的任务、自己的计划。', value: 'B' }, { label: '思绪飘忽。一会儿跳到这里，一会儿跳到那里。', value: 'C' }, { label: '很吵。有些念头反复冒出来，脑子里嗡嗡的。', value: 'D' }] },
+        { text: '在塔里，你最害怕发生什么事？', options: [{ label: '失控。自己的能力暴走，伤到不该伤的人。', value: 'A' }, { label: '被背叛。你信任的人在最关键的时候从背后捅你一刀。', value: 'B' }, { label: '被遗忘。你做了很多事情，但没有人记得你存在过。', value: 'C' }, { label: '平庸，慢慢地变成一个可有可无的人。', value: 'D' }] },
+        { text: '当你精神暴乱的时候，你希望怎么被治愈？', options: [{ label: '身体接触。希望有人能给我传递温度，让我感到安心。', value: 'A' }, { label: '精神辅助。希望有人进入我的精神图景，帮我把梳理混乱。', value: 'B' }, { label: '药物辅助。能吃药就不用依靠别人。', value: 'C' }, { label: '自助隔离。不想依靠别人也不想依赖药物。', value: 'D' }] },
+        { text: '你更愿意和什么样的人一起执行任务？', options: [{ label: '和我一样独立的人。各做各的，互不拖累。', value: 'A' }, { label: '比我强的人。我能从他身上学到很多东西。', value: 'B' }, { label: '需要我的人。被需要让我觉得自己是有价值的。', value: 'C' }, { label: '和我互补的人。他指挥我干活，或者我下令他执行。', value: 'D' }] },
+        { text: '战斗中你的战友倒下了，你第一反应是什么？', options: [{ label: '把他拖回来，不能让他成为战场躺尸。', value: 'A' }, { label: '他是我最好的朋友，那一瞬间我的脑子炸开，只剩下愤怒。', value: 'B' }, { label: '扫一眼直接走掉。他已经没救了，剩下的任务还得继续完成。', value: 'C' }, { label: '抡起他的尸体往敌人脸上砸。', value: 'D' }] },
+        { text: '你觉得在塔里，什么才算真正的强大？', options: [{ label: '武力超强。拳头够硬，谁都不用怕。', value: 'A' }, { label: '算无遗策，玩弄人心，洞穿一切。', value: 'B' }, { label: '精神稳定。只有哨兵的精神图景稳定，才能让实力稳步提升。', value: 'C' }, { label: '聚拢人心。把所有人拧成一条心，朝着同个目标前进。', value: 'D' }] },
+        { text: '你有想过离开这座塔吗？', options: [{ label: '没想过，这里就是我的最终归宿。', value: 'A' }, { label: '想过，只是还没到时候，等我把该做的事做完。', value: 'B' }, { label: '一直在想，有合适的时机我就走。', value: 'C' }, { label: '想不想都不重要了，我已经走不掉了。', value: 'D' }] }
+    ];
+
+    // ================================================================
+    // 2. 角色数据（16个角色）
+    // ================================================================
+    const ROLES = [{
+        name: '戍卫',
+        en: 'SENTINEL',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%8D%E5%8D%AB.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%98%E9%A9%AC.svg',
+        quote: '“对职责的忠诚、对真理的坚守、对良知的笃定，像一块界碑。只为告诉身后的人：此处有人值守。”',
+        analysis: '你是戍卫，你的忠诚基于深刻的责任感和信念，一旦认定目标，就会建立稳固的情感联结。在困境中能够展现出惊人的韧性，不会轻易动摇，是塔内最值得信赖的依靠。规则优先，擅长执行精准指令。你比任何人都清楚，规则是无数次血与火淬炼出的最优解。',
+        level: '中层',
+        grade: 'A',
+        dept: '战斗部',
+        deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
+        spiritName: '战马',
+        spiritDesc: '马儿是一种骄傲且自尊心极强的精神体。它的耐力是绝佳的战术搭档。当主人需要长途奔袭或阵地坚守时，它们能保持良好的精力和充沛的活力。马儿对主人情绪的感知极为敏锐。它们感知到主人的精神波动，安静地站在主人身边，稳定主人的情绪，直到主人准备好继续向前。',
+        bond: 90,
+        values: [0.4, 1.0, 1.0, 0.8, 1.0, 0.2],
+        match: '与普通向导完美匹配'
+    }, {
+        name: '守夜人',
+        en: 'SENTINEL',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%AE%88%E5%A4%9C%E4%BA%BA.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8C%9E%E7%8C%81.svg',
+        quote: '“黑夜是我的领地，我知道危险会在哪里出现，也知道我该站在哪里等它。”',
+        analysis: '你是守夜人，是一座孤岛，不属于任何热闹。你擅长捕捉风声，不论是环境的微妙变化，还是局势中尚未可知的风险，都逃不过你的眼睛。你不会轻易暴露底牌或分享情绪，没人知道你的精神体长什么样。沉默挡住了窥探，也省去了辩驳的消耗。',
+        level: '中层',
+        grade: 'A',
+        dept: '后勤部',
+        deptComment: '“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”',
+        spiritName: '猞猁',
+        spiritDesc: '猞猁是一种极为机警、孤傲的精神体。在猞猁眼里，主人是一个值得尊敬的同居者。它会对主人产生轻微依赖，比如每天在房门口等你。等到你时，它会轻轻蹭一下你的腿，用气味把你纳入它的安全领地之内。除此之外，它很少靠近主人，但在危机来临之前，它会立马挡在你身前。在战斗状态下，猞猁不会发出任何惊动对方的声音。它会不停地观察，在对手暴露破绽的那一瞬间伺机而动，一击即中。',
+        bond: 80,
+        values: [0.6, 0.4, 0.8, 0.8, 0.2, 0.6],
+        match: '需特定向导'
+    }, {
+        name: '凶器',
+        en: 'SHADOW BLADE',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%BB%91%E6%9A%97%E5%93%A8%E5%85%B5.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%BC.svg',
+        quote: '“安抚我的代价是被我撕碎，我不接受任何形式的臣服。”',
+        analysis: '你是黑暗哨兵，一把猎猎作响的妖刀。你的精神图景是永夜的荒原，战斗时随时可能暴走，你认为被安抚等于被驯服。塔强制哨兵绑定向导，本质是在阉割哨兵的天性。你想要摧毁匹配机制，让所有哨兵像你一样自由且疯狂。',
+        level: '天阶',
+        grade: 'SS',
+        dept: '研究部',
+        deptComment: '“研究部都是正常人，说不正常的都被抓去做研究了。”',
+        spiritName: '狼',
+        spiritDesc: '狼是你身上最危险的部分。它会在你出现情绪波动时，耳朵竖起、瞳孔收紧、身体微微压低。它的世界只围着你一个人转。“那个人皱眉了”、“那个人满意了”——这是它判断对错的唯一标准。谁敢碰你一根手指，它就会紧紧咬住对方。你站过的地面、坐过的椅子、握过的手，都沾着来自它领地的气味。主人的意志是它的獠牙。主人目光落在谁身上，谁就是它的目标。',
+        bond: 80,
+        values: [0.8, 0.8, 0.6, 1.0, 1.0, 0.4],
+        match: '向导精神力不足即被吞噬'
+    }, {
+        name: '巡游者',
+        en: 'WANDERER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%B7%A1%E6%B8%B8%E8%80%85.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%B2%B8.svg',
+        quote: '“像风滚草一样飞过塔边，越过山岗，随风而去，不带走一切。”',
+        analysis: '你是巡游者，一座永不靠岸的深海。你见过太多的代价，不想被绑在某个地方。你一直从未停歇，不让自己被任何东西钉住。',
+        level: '中层',
+        grade: 'A',
+        dept: '战斗部',
+        deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
+        spiritName: '鲸',
+        spiritDesc: '鲸鱼是你脑海深处的秘密。它在你的精神图景里缓慢游动，渴望着深层的链接。在与你相处时，会蹭一蹭你表达亲昵。它与你共脑，当你照顾受伤的同伴，甚至为死者守灵数日时，它也会表现出极度的悲伤。',
+        bond: 80,
+        values: [1.0, 1.0, 0.8, 0.8, 1.0, 0.6],
+        match: '与普通向导完美匹配'
+    }, {
+        name: '变装者',
+        en: 'CHAMELEON',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8F%98%E8%A3%85%E8%80%85.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%AB%A0%E9%B1%BC.svg',
+        quote: '“人的诸种恶行中，骄傲为最，它以多种多样的形式出现，而又在极其繁复的伪装下隐匿。”',
+        analysis: '你是变装者，你穿过很多地方，塔的走廊、荒野的废墟、游离者的据点、边境的旧哨站。你经过它们，像水流过石头，不改变形状与痕迹。每个见过你的人，都无法确定自己看到的是真实的你，还是你当时选择让他们看到的样子。',
+        level: '中层',
+        grade: 'A',
+        dept: '情报部',
+        deptComment: '“刚来就被外派出去了，三年回来才知道塔里长什么样。”',
+        spiritName: '章鱼',
+        spiritDesc: '章鱼型精神体是所有精神体里最难被记录的一种。它没有固定的形态——不是“像章鱼”，而是“它就是你看到它的时候它正在变成的样子”。它不会主动靠近你，也不会主动离开你，它只是在你的视线边缘调整颜色和形态，直到你分不清那是它还是背景本身。',
+        bond: 50,
+        values: [0.6, 0.2, 0.4, 0.6, 0.2, 1.0],
+        match: '需特定向导'
+    }, {
+        name: '恶魔',
+        en: 'DEMON',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%81%B6%E9%AD%94.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%9D%99%E8%9D%A0.svg',
+        quote: '“如果你需要救赎，我甚至可以扮演救世主，只要你付得起代价。”',
+        analysis: '你是恶魔，在暗处待得够久了，久到你不再需要光线来确认方向。你用自己的频率绘制地图。塔的墙壁、荒野的边界、风的路径，都在你的感知范围里。',
+        level: '-',
+        grade: 'SR',
+        dept: '塔外',
+        deptComment: '-',
+        spiritName: '蝙蝠',
+        spiritDesc: '蝙蝠型精神体是所有精神体里最不依赖视觉的一种。它不需要光线来确认方向——它用自己的声音绘制地图。在游离黑暗化状态下，蝙蝠不再只是“夜间活动”的生物，而是“已经不需要日间规则”的存在。它的世界不是由光线定义的，而是由回声定义的。',
+        bond: 40,
+        values: [0.2, 0.6, 0.4, 0.4, 0.8, 1.0],
+        match: '☠融合即被吞噬'
+    }, {
+        name: '摆渡人',
+        en: 'FERRYMAN',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%91%86%E6%B8%A1%E4%BA%BA.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%B9%BF.svg',
+        quote: '“我要引瞎子行不认识的道，领他们走不知道的路；在他们面前使黑暗变为光明，使弯曲变为平直。”',
+        analysis: '你是摆渡人，塔里最安静的那道门。你不追求被记住，你只追求每一次接住都接得稳。你不问他们从哪来，也不问他们要去哪。你只负责在渡口等着，等他们需要的时候，送他们过去。',
+        level: '中层',
+        grade: 'A',
+        dept: '医疗部',
+        deptComment: '“想刷步数的来，那床病人又不稳定了，得赶紧去疏导。”',
+        spiritName: '鹿',
+        spiritDesc: '鹿型精神体是塔内最常见的注册向导精神体之一，但它也是最不容易被注意到的。它不张扬，不抢先，不站到最前面。它只是站在渡口边缘，等需要它的人自己走过来。它不会主动进入哨兵的精神图景，但它会在你靠近时安静地站在原地等你开口。',
+        bond: 70,
+        values: [0.6, 0.8, 0.8, 0.6, 0.6, 0.4],
+        match: '与普通哨兵完美匹配'
+    }, {
+        name: '真相窥视者',
+        en: 'TRUTH SEEKER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%9C%9F%E7%9B%B8%E7%AA%A5%E8%A7%86%E8%80%85.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8C%AB%E5%A4%B4%E9%B9%B0.svg',
+        quote: '“倘若一个国家是一条航行在大海上的船，新闻记者就是船头的瞭望者。他要在一望无际的海面上观察一切，审视海上的不测风云和浅滩暗礁，及时发出警告。”',
+        analysis: '你是真相窥视者，你知道所有人的秘密。谁在说谎，谁在假装忠诚，谁的忠诚正在崩裂。你看见的东西比任何报告都多。',
+        level: '中层',
+        grade: 'A',
+        dept: '档案部',
+        deptComment: '“坐班时间太长了，战斗部能不能少点人员伤亡，档案记录不过来了。”',
+        spiritName: '猫头鹰',
+        spiritDesc: '猫头鹰型精神体是塔内最安静的向导精神体之一。它不主动靠近哨兵，也不主动回避——它只是停在你视线边缘的高处，看着你，判断你，但不介入。在封闭状态下，猫头鹰的“封闭”不是拒绝接触——是“它已经看了足够多，不需要再确认了”。',
+        bond: 90,
+        values: [0.6, 0.2, 1.0, 0.8, 0.2, 0.8],
+        match: '需特定哨兵'
+    }, {
+        name: '狡黠的掮客',
+        en: 'CUNNING BROKER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%A1%E9%BB%A0%E7%9A%84%E6%8E%AE%E5%AE%A2.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%90%E7%8B%B8.svg',
+        quote: '“卑鄙与伟大、恶毒与善良、仇恨与热爱可以互不排斥地并存在一颗心里。”',
+        analysis: '你是狡黠的掮客，手上沾着最多的灰。你站在规则与漏洞之间，清楚每一条规则的缝隙。你说话总是留半句，做事总是留一手，走动时总是刚好避开所有人的视线。',
+        level: '中层',
+        grade: 'A',
+        dept: '研究部',
+        deptComment: '“研究部都是正常人，说不正常的都被抓去做研究了。”',
+        spiritName: '狐狸',
+        spiritDesc: '狐型精神体是塔里最安静、最难以预测的向导精神体之一。它不正面冲突，不展示敌意，不暴露真实意图。它坐在你旁边，但它的影子在另一个方向。它不会主动攻击任何人，但它会在你露出破绽的时候，安静地把你不需要的东西拿走。',
+        bond: 50,
+        values: [0.4, 0.6, 0.4, 0.6, 0.4, 1.0],
+        match: '需特定哨兵'
+    }, {
+        name: '荒泽客',
+        en: 'MARSH WANDERER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%8D%92%E6%B3%BD%E5%AE%A2.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%A4%A9%E9%B9%85.svg',
+        quote: '“伤口，是光照进来的地方。”',
+        analysis: '你是荒泽客，不急不躁，不争不抢，不被任何空间定义。你浮在水面上的姿态是优雅的、静止的——但水面之下的动作一直在持续。',
+        level: '中层',
+        grade: 'A',
+        dept: '文工部',
+        deptComment: '“有时集中排演1-2个月，那段时间会加班到很晚。”',
+        spiritName: '天鹅',
+        spiritDesc: '天鹅型精神体是向导精神体里最“不解释自己”的一种。它不急不躁，不争不抢，不被任何空间定义。它浮在水面上的姿态是优雅的、静止的——但水面之下的动作一直在持续。它不主动靠近人类，也不回避人类。它只是在水面上游着，保持一个不会太近也不会太远的距离。',
+        bond: 70,
+        values: [0.4, 1.0, 0.8, 0.6, 0.8, 0.2],
+        match: '与普通哨兵完美匹配'
+    }, {
+        name: '局外人',
+        en: 'OUTSIDER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%B1%80%E5%A4%96%E4%BA%BA.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B9%8C%E9%BE%9F.svg',
+        quote: '“人们永远也无法改变生活，什么样的生活都差不多。”',
+        analysis: '你是局外人，你在塔的边缘生活，在人群里沉默。你并不确定自己是谁。你首要的任务，是找到回归自我的路。',
+        level: '中层',
+        grade: 'A',
+        dept: '后勤部',
+        deptComment: '“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”',
+        spiritName: '乌龟',
+        spiritDesc: '乌龟型精神体是塔内最不起眼却最持久的向导精神体之一。它不主动介入任何事，不参与任何争论，不站队，不表态。它只是安静地待在角落，观察，等待，保持自己的节奏。它的壳不是防御——是它自己的完整世界。',
+        bond: 50,
+        values: [0.4, 1.0, 0.6, 0.4, 0.8, 0.8],
+        match: '需特定哨兵'
+    }, {
+        name: '食腐者',
+        en: 'SCAVENGER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%A3%9F%E8%85%90%E8%80%85.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%A7%83%E9%B9%AB.svg',
+        quote: '“死亡的使者到来时，一切事务都将停止。”',
+        analysis: '你是食腐者，等所有人都离开之后，你才触碰死去的哨兵。',
+        level: '高层',
+        grade: 'S',
+        dept: '战略部',
+        deptComment: '“一天开八个会，就为了跟这群蠢货吵方案。还得给上级交代结果。”',
+        spiritName: '秃鹫',
+        spiritDesc: '秃鹫型精神体是塔内最被误解的向导精神体之一。它不主动攻击任何人，不主动接近任何人，但它总会在正确的时间出现在正确的地方。它不是“死亡”的象征——它是“死亡已经结束”的象征。它不带走生命，它带走生命留下的痕迹。',
+        bond: 80,
+        values: [0.4, 1.0, 0.8, 0.8, 1.0, 0.8],
+        match: '哨兵精神力不足即被驯服'
+    }, {
+        name: '猎手',
+        en: 'HUNTER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8D%A1%E8%83%8C.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%BB%91%E8%B1%B9.svg',
+        quote: '“我不想输，但赢也无法令我上瘾。”',
+        analysis: '你是猎手，敏捷矫健，果断决绝，冷静精准。你同时拥有哨兵和向导的能力，但你不是“双倍”的存在——你是“完整”的存在。你不需要别人来补全你，因为你自己就是完整的圆。',
+        level: '高层',
+        grade: 'S',
+        dept: '战斗部',
+        deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
+        spiritName: '黑豹',
+        spiritDesc: '黑豹型精神体是塔内最难以观测的双向精神体之一。它不在任何人的视线里停留，不主动展示自己，不回应任何形式的试探。它只是在你需要它的时候，出现在你刚好能看见的位置。它不会主动靠近你，也不会主动远离你。',
+        bond: 80,
+        values: [1.0, 0.4, 0.8, 0.8, 0.2, 0.8],
+        match: '需特定哨兵/向导'
+    }, {
+        name: '毒牙',
+        en: 'VENOM FANG',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8D%A1%E8%83%8C.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%9B%87.svg',
+        quote: '“只要有机会，他们随时都会展现出其邪恶的本性。”',
+        analysis: '你是毒牙，冷血无情，缓慢侵蚀，善于谋略。你同时拥有哨兵和向导的能力，但你不把它们当作“两种能力”——你当作“一种完整的方法论”。你观察，你等待，你行动。',
+        level: '高层',
+        grade: 'S',
+        dept: '战略部',
+        deptComment: '“一天开八个会，就为了跟这群蠢货吵方案。还得给上级交代结果。”',
+        spiritName: '蛇',
+        spiritDesc: '蛇型精神体是塔内最难以预测的双向精神体之一。它不主动展示自己，不回应任何形式的试探，不参与任何不必要的接触。它只是在你看不见的地方保持同步。它不会主动靠近你，也不会主动远离你。',
+        bond: 50,
+        values: [0.8, 0.2, 0.6, 0.4, 0.2, 1.0],
+        match: '精神力不足即被吞噬'
+    }, {
+        name: '囚徒',
+        en: 'PRISONER',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%9B%9A%E5%BE%92.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B8%89%E5%A4%B4%E7%8A%AC.svg',
+        quote: '“为了找借口把人囚禁起来，就劝大家都相信这个人已经疯了。”',
+        analysis: '你是囚徒，塔的造物，塔的隐患，塔不敢销毁的作品。你的存在不是“出生”，是“被制造”。你被锁在笼子里太久了，久到你开始忘记笼子外面是什么样子。你被研究太久了，久到你开始把“被观察”当成“被看见”。',
+        level: '-',
+        grade: 'SR',
+        dept: '实验室',
+        deptComment: '“泡营养液挺舒服的，就是眼鼻嘴不在一个罐子里，看东西麻烦。”',
+        spiritName: '三头犬',
+        spiritDesc: '三头犬型精神体是塔内最不稳定的精神体之一。它有三个头，三个方向，三种欲望——但只有一个身体。它们不总是往同一个方向移动，不总是共享同一个目标，不总是达成共识。它的主人被困在它们的拉扯中。',
+        bond: 100,
+        values: [1.0, 0.2, 1.0, 1.0, 1.0, 0.4],
+        match: '☠融合即被吞噬'
+    }, {
+        name: '不可提及的存在',
+        en: 'UNSPEAKABLE ONE',
+        cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B8%8D%E5%8F%AF%E6%8F%90%E5%8F%8A%E7%9A%84%E5%AD%98%E5%9C%A8.jpg',
+        spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%88%A9%E7%BB%B4%E5%9D%A6.svg',
+        quote: '“人类最原始且最强烈的情绪就是恐惧，而最原始且最强烈的恐惧就是对未知事物的恐惧。”',
+        analysis: '你是不可提及的存在。塔的档案里没有你的名字，不是因为不存在，是因为没有人敢写下。你曾经在塔的地下层被“制造”出来。你不是被生下来的，你是被组装出来的——用哨兵的碎片、向导的残留、实验失败的样本、还有塔不愿意承认的东西。',
+        level: '-',
+        grade: 'SR',
+        dept: '实验室',
+        deptComment: '“......”',
+        spiritName: '利维坦',
+        spiritDesc: '利维坦型精神体不是“被造出来”的——它是“被唤醒”的。塔以为自己在制造一个可控的实验体，但实际上他们只是打开了一道不该打开的门。它不在塔的档案分类里，也不在塔的视线范围内。它不需要攻击——它只要存在，就已经是塔无法处理的信息了。',
+        bond: 90,
+        values: [1.0, 0.2, 0.8, 1.0, 0.2, 1.0],
+        match: '☠融合即被吞噬'
+    }];
+
+    // ================================================================
+    // 3. 计分映射
+    // ================================================================
+    const SCORE_MAP = {
+        '1A': [0.4, 0.1, 0.1, 0.3, 0.1, 0],
+        '1B': [0, 0.5, -0.2, 0.3, 0.1, 0.3],
+        '1C': [0.2, 0.2, 0.1, 0.2, 0.3, 0],
+        '1D': [0.5, 0.1, -0.3, 0.5, -0.3, 0.5],
+        '2A': [0.2, 0.2, 0.2, 0.2, 0.2, 0],
+        '2B': [0.5, 0.1, -0.1, -0.1, -0.1, 0.7],
+        '2C': [0.1, 0.1, 0.3, 0.2, 0.3, 0],
+        '2D': [0.5, 0, 0, 0.3, 0, 0.2],
+        '3A': [0.5, -0.1, -0.1, 0.4, 0.1, 0.2],
+        '3B': [0.2, 0.2, 0.2, 0.2, 0.2, 0],
+        '3C': [0.1, 0.4, 0.2, 0.1, 0.2, 0],
+        '3D': [0.2, 0.1, 0.5, 0.1, 0.2, -0.1],
+        '4A': [0.5, -0.3, 0.2, 0.3, 0.2, 0.1],
+        '4B': [0.1, 0.3, 0.3, 0.1, 0.2, 0],
+        '4C': [0.1, 0, 0, 0.4, 0, 0.5],
+        '4D': [0.7, -0.2, -0.2, 0.5, -0.2, 0.4],
+        '4E': [0, 0.2, 0.4, 0.1, 0.2, 0.1],
+        '5A': [0.2, 0.4, 0.1, 0.1, 0.3, -0.1],
+        '5B': [0, 0, 0.5, 0.2, 0.3, 0],
+        '5C': [0.1, 0.1, -0.2, 0.1, 0, 0.9],
+        '5D': [0.3, 0.1, 0.1, 0.3, 0.1, 0.1],
+        '6A': [0, 0.1, 0.5, 0.3, 0.3, -0.2],
+        '6B': [0.2, 0.1, 0, 0.2, 0.2, 0.3],
+        '6C': [0.3, 0.1, 0.1, 0.2, 0, 0.3],
+        '6D': [0.3, 0.1, -0.2, 0.4, -0.1, 0.5],
+        '7A': [0.2, 0.1, 0.4, 0.3, 0, 0],
+        '7B': [0.5, 0.1, -0.3, 0.1, 0, 0.6],
+        '7C': [0, 0.3, 0.2, 0, 0.5, 0],
+        '7D': [0.4, 0, 0, 0, 0, 0.6],
+        '8A': [0.4, 0, 0, 0.3, 0, 0.3],
+        '8B': [0.1, 0.4, 0.3, 0.1, 0.2, -0.1],
+        '8C': [0.5, -0.2, -0.2, 0.5, 0.1, 0.3],
+        '8D': [0.3, 0, 0, 0.4, 0.3, 0],
+        '9A': [0.1, 0.2, 0.5, 0.1, 0.1, 0],
+        '9B': [0.3, 0, 0, 0.3, 0, 0.4],
+        '9C': [0.3, 0.2, 0, 0, 0, 0.5],
+        '9D': [0.3, 0.1, 0, 0.1, 0, 0.5],
+        '10A': [0.2, 0.1, -0.3, 0.3, 0.1, 0.6],
+        '10B': [0.1, 0.3, -0.1, 0.1, 0.3, 0.3],
+        '10C': [0.1, 0.4, 0.1, 0.2, 0.2, 0],
+        '10D': [0.2, 0.1, 0.1, 0.5, 0.1, 0],
+        '11A': [0, 0.2, 0.5, 0.1, 0.3, -0.1],
+        '11B': [0, 0.5, 0.4, 0.1, 0.2, -0.2],
+        '11C': [0, 0, 0.2, 0.5, 0, 0.1],
+        '11D': [0, -0.1, 0.1, 0.7, -0.1, 0.4],
+        '12A': [0.2, -0.1, 0.1, 0.2, -0.2, 0.8],
+        '12B': [0.1, 0.1, 0.1, 0.3, 0.3, 0.1],
+        '12C': [0.1, 0.5, 0, 0.1, 0.3, 0],
+        '12D': [0.2, 0.2, 0.1, 0.1, 0.5, -0.1],
+        '13A': [0.1, 0.4, 0.1, 0.2, 0.2, 0],
+        '13B': [0.3, 0.1, -0.3, 0.5, 0.2, 0.2],
+        '13C': [0.1, -0.2, 0.3, 0.4, -0.1, 0.5],
+        '13D': [0.3, -0.3, 0, 0.2, -0.2, 1],
+        '14A': [0.3, -0.1, 0.3, 0.3, -0.1, 0.3],
+        '14B': [0.1, 0.2, 0.1, 0.2, 0, 0.4],
+        '14C': [0.1, 0.1, 0.3, 0.1, 0.4, 0],
+        '14D': [0.1, 0.4, 0.1, 0.1, 0.2, 0.1],
+        '15A': [0.1, 0.2, 0.4, 0.1, 0.3, -0.1],
+        '15B': [0.2, 0.1, 0.1, 0.3, 0.1, 0.2],
+        '15C': [0.2, 0, -0.2, 0.3, -0.1, 0.8],
+        '15D': [0.2, -0.1, -0.2, 0.2, -0.1, 1]
+    };
+
+    // ================================================================
+    // 4. 问卷控制
+    // ================================================================
+    let currentQ = 0;
+    let answers = new Array(QUESTIONS.length).fill(null);
+
+    const pageCover = document.getElementById('pageCover');
+    const pageQuiz = document.getElementById('pageQuiz');
+    const pageCard = document.getElementById('pageCard');
+    const pageResult = document.getElementById('pageResult');
+
+    const qCounter = document.getElementById('qCounter');
+    const progressFill = document.getElementById('progressFill');
+    const qText = document.getElementById('qText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnStart = document.getElementById('btnStart');
+    const btnRestart = document.getElementById('btnRestart');
+    const btnShowResult = document.getElementById('btnShowResult');
+
+    const cardFlipper = document.getElementById('cardFlipper');
+    const cardFrontImg = document.getElementById('cardFrontImg');
+    const cardFrontBadge = document.getElementById('cardFrontBadge');
+    const cardPageCn = document.getElementById('cardPageCn');
+    const cardPageEn = document.getElementById('cardPageEn');
+
+    function renderQuestion(index) {
+        const q = QUESTIONS[index];
+        const pct = Math.round(((index + 1) / QUESTIONS.length) * 100);
+        qCounter.textContent = `${index + 1} / ${QUESTIONS.length}`;
+        progressFill.style.width = pct + '%';
+
+        qText.textContent = q.text;
+
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            if (answers[index] === opt.value) btn.classList.add('selected');
+            btn.textContent = `${String.fromCharCode(65 + i)}. ${opt.label}`;
+            btn.dataset.value = opt.value;
+            btn.addEventListener('click', function() {
+                optionsContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                answers[index] = this.dataset.value;
+                updateButtons();
+            });
+            optionsContainer.appendChild(btn);
+        });
+        updateButtons();
+    }
+
+    function updateButtons() {
+        btnPrev.disabled = currentQ === 0;
+        btnNext.textContent = currentQ === QUESTIONS.length - 1 ? '查看结果 →' : '下一题 →';
+        const hasAnswer = answers[currentQ] !== null;
+        btnNext.style.opacity = hasAnswer ? '1' : '0.4';
+        btnNext.style.cursor = hasAnswer ? 'pointer' : 'not-allowed';
+    }
+
+    function goToPrev() {
+        if (currentQ > 0) { currentQ--; renderQuestion(currentQ); }
+    }
+
+    function goToNext() {
+        if (answers[currentQ] === null) return;
+        if (currentQ === QUESTIONS.length - 1) {
+            calculateAndShowCard();
+            return;
+        }
+        currentQ++;
+        renderQuestion(currentQ);
+    }
+
+    // ================================================================
+    // 5. 计分 + 匹配
+    // ================================================================
+    function computeResult() {
+        const userValues = [0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < QUESTIONS.length; i++) {
+            const key = (i + 1) + answers[i];
+            const score = SCORE_MAP[key];
+            if (score) {
+                for (let j = 0; j < 6; j++) {
+                    userValues[j] += score[j];
+                }
+            }
+        }
+
+        const normalized = userValues.map(v => {
+            let val = (v + 2) / 7;
+            return Math.min(1, Math.max(0, val));
+        });
+
+        const results = ROLES.map(role => {
+            let sum = 0;
+            for (let i = 0; i < 6; i++) {
+                sum += (normalized[i] - role.values[i]) ** 2;
+            }
+            return { ...role, dist: Math.sqrt(sum) };
+        });
+
+        results.sort((a, b) => a.dist - b.dist);
+        return { normalized, results, best: results[0] };
+    }
+
+    // ================================================================
+    // 6. 卡牌页
+    // ================================================================
+    function calculateAndShowCard() {
+        const result = computeResult();
+        const role = result.best;
+        window._matchedRole = role;
+
+        pageQuiz.classList.remove('active');
+        pageCard.classList.add('active');
+
+        cardPageCn.textContent = role.name;
+        cardPageEn.textContent = role.en;
+
+        cardFrontImg.src = role.cardImg;
+        cardFrontBadge.textContent = `${role.name} · ${role.grade || '-'}`;
+
+        cardFlipper.classList.remove('flipped');
+        setTimeout(() => {
+            cardFlipper.classList.add('flipped');
+        }, 400);
+    }
+
+    cardFlipper.addEventListener('click', function() {
+        this.classList.toggle('flipped');
+    });
+
+    // ================================================================
+    // 7. 结果页
+    // ================================================================
+    function showResultPage() {
+        const role = window._matchedRole;
+        if (!role) return;
+
+        pageCard.classList.remove('active');
+        pageResult.classList.add('active');
+
+        document.getElementById('resultEn').textContent = role.en || 'SENTINEL';
+        document.getElementById('resultCn').textContent = role.name;
+
+        document.getElementById('resultQuote').textContent = role.quote || '“……”';
+        document.getElementById('resultAnalysis').textContent = role.analysis || '……';
+        document.getElementById('resultLevel').textContent = role.level || '-';
+        document.getElementById('resultGrade').textContent = role.grade || '-';
+        document.getElementById('resultDept').textContent = `所属部门：${role.dept || '-'}`;
+        document.getElementById('resultDeptComment').textContent = role.deptComment || '';
+        document.getElementById('resultSpiritName').textContent = role.spiritName || '-';
+        document.getElementById('resultSpiritImg').src = role.spiritImg || '';
+        document.getElementById('resultSpiritDesc').textContent = role.spiritDesc || '……';
+
+        const bond = role.bond || 0;
+        const circumference = 2 * Math.PI * 36;
+        const offset = circumference * (1 - bond / 100);
+        document.querySelector('.result-bond-circle .progress').style.strokeDasharray = circumference;
+        document.querySelector('.result-bond-circle .progress').style.strokeDashoffset = offset;
+        document.getElementById('bondText').textContent = bond + '%';
+
+        const labels = ['战力', '共情力', '稳定性', '意志力', '协同程度', '不可预测性'];
+        const colors = ['#b8544a', '#6a8a9e', '#6a7a4a', '#b8954a', '#8a7a9e', '#3a6a8a'];
+        const vals = role.values.map(v => Math.round(v * 100));
+        for (let i = 0; i < 6; i++) {
+            document.getElementById(`statFill${i+1}`).style.width = vals[i] + '%';
+            document.getElementById(`statFill${i+1}`).style.background = colors[i];
+            document.getElementById(`statPct${i+1}`).textContent = vals[i] + '%';
+        }
+
+        drawRadar(role.values);
+        document.getElementById('resultMatch').textContent = `哨向匹配度：${role.match || '需进一步确认'}`;
+
+        if (document.getElementById('galleryGrid').children.length === 0) {
+            renderGallery();
+        }
+
+        pageResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    btnShowResult.addEventListener('click', showResultPage);
+
+    // ================================================================
+    // 8. 雷达图
+    // ================================================================
+    function drawRadar(values) {
+        const canvas = document.getElementById('resultRadarChart');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         const w = canvas.width,
@@ -640,9 +1690,7 @@
             cy = h / 2;
         const radius = 85;
         const sides = 6;
-        const values = [3, 2, 4, 4, 1, 3];
         const labels = ['战力', '共情力', '稳定性', '意志力', '协同程度', '不可预测性'];
-        const maxVal = 5;
 
         ctx.clearRect(0, 0, w, h);
 
@@ -671,7 +1719,7 @@
         ctx.beginPath();
         for (let i = 0; i < sides; i++) {
             const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
-            const r = radius * (values[i] / maxVal);
+            const r = radius * Math.min(Math.max(values[i], 0), 1);
             const x = cx + r * Math.cos(angle);
             const y = cy + r * Math.sin(angle);
             i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
@@ -685,7 +1733,7 @@
 
         for (let i = 0; i < sides; i++) {
             const angle = -Math.PI / 2 + (i * 2 * Math.PI / sides);
-            const r = radius * (values[i] / maxVal);
+            const r = radius * Math.min(Math.max(values[i], 0), 1);
             const x = cx + r * Math.cos(angle);
             const y = cy + r * Math.sin(angle);
 
@@ -703,7 +1751,73 @@
             ctx.textBaseline = 'middle';
             ctx.fillText(labels[i], lx, ly);
         }
-    };
+    }
+
+    // ================================================================
+    // 9. 身份牌画廊
+    // ================================================================
+    function renderGallery() {
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = '';
+        ROLES.forEach(role => {
+            const card = document.createElement('div');
+            card.className = 'mini-card';
+            card.innerHTML = `
+                <div class="mini-spirit">${getSpiritSVG(role.spiritName)}</div>
+                <div class="mini-name">${role.name}</div>
+                <div class="mini-en">${role.en}</div>
+            `;
+            card.addEventListener('click', function() {
+                this.classList.remove('pop');
+                void this.offsetWidth;
+                this.classList.add('pop');
+            });
+            grid.appendChild(card);
+        });
+    }
+
+    let galleryOpen = false;
+    document.getElementById('galleryToggle').addEventListener('click', function() {
+        galleryOpen = !galleryOpen;
+        document.getElementById('galleryGrid').classList.toggle('open', galleryOpen);
+        document.getElementById('galleryArrow').classList.toggle('open', galleryOpen);
+        this.querySelector('span:first-child').textContent = galleryOpen ? '📜 收起所有身份牌' : '📜 点击查看所有身份牌';
+    });
+
+    // ================================================================
+    // 10. 页面切换
+    // ================================================================
+    function goToQuiz() {
+        pageCover.classList.remove('active');
+        pageQuiz.classList.add('active');
+        renderQuestion(0);
+    }
+
+    function goToCover() {
+        pageResult.classList.remove('active');
+        pageCard.classList.remove('active');
+        pageCover.classList.add('active');
+        answers = new Array(QUESTIONS.length).fill(null);
+        currentQ = 0;
+        document.getElementById('galleryGrid').classList.remove('open');
+        document.getElementById('galleryArrow').classList.remove('open');
+        document.getElementById('galleryToggle').querySelector('span:first-child').textContent = '📜 点击查看所有身份牌';
+        galleryOpen = false;
+        window._matchedRole = null;
+    }
+
+    btnStart.addEventListener('click', goToQuiz);
+    btnPrev.addEventListener('click', goToPrev);
+    btnNext.addEventListener('click', goToNext);
+    btnRestart.addEventListener('click', goToCover);
+
+    document.addEventListener('keydown', (e) => {
+        if (!pageQuiz.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft' && !btnPrev.disabled) goToPrev();
+        else if (e.key === 'ArrowRight' || e.key === 'Enter') goToNext();
+    });
+
+    pageCover.classList.add('active');
 </script>
 
 </body>

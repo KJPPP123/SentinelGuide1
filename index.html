@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>哨向测试 · 塔内身份</title>
-    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- html2canvas 用于截图 -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* ===== 全局重置 ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             min-height: 100vh;
@@ -34,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(214, 203, 184, 0.35);
+            background: rgba(214, 203, 184, 0.2);
             z-index: 0;
         }
 
@@ -50,30 +57,37 @@
             border-radius: 0;
         }
 
-        .page { display: none; }
-        .page.active { display: block; }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
 
         /* ================================================================
            封面页
            ================================================================ */
         .cover-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #5a4a3a;
-            font-family: 'Noto Serif SC', serif;
-            letter-spacing: 4px;
             text-align: center;
-            margin-bottom: 2px;
+            margin-bottom: 16px;
         }
         .cover-title .en {
             font-family: 'Uncial Antiqua', serif;
-            font-size: 18px;
-            font-weight: 400;
+            font-size: 20px;
             color: #8b7355;
             letter-spacing: 4px;
             display: block;
-            margin-top: 2px;
+            margin-bottom: 6px;
         }
+        .cover-title .cn {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #5a4a3a;
+            letter-spacing: 6px;
+            display: block;
+        }
+
         .cover-text {
             font-size: 16px;
             line-height: 2;
@@ -82,8 +96,14 @@
             text-align: left;
             padding: 0 4px;
         }
-        .cover-text .highlight { color: #5a4a3a; font-weight: 700; }
-        .cover-text .ellipsis { color: #5a4a3a; font-weight: 700; }
+        .cover-text .highlight {
+            color: #5a4a3a;
+            font-weight: 700;
+        }
+        .cover-text .ellipsis {
+            color: #5a4a3a;
+            font-weight: 700;
+        }
         .cover-text .last-line {
             margin-top: 12px;
             text-align: right;
@@ -131,34 +151,24 @@
            问卷页
            ================================================================ */
         .quiz-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .quiz-header .en {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 18px;
+            color: #8b7355;
+            letter-spacing: 4px;
+            display: block;
             margin-bottom: 4px;
         }
-        .quiz-header .title-text {
-            font-size: 18px;
-            font-weight: 400;
-            color: #5a4a3a;
+        .quiz-header .cn {
             font-family: 'Noto Serif SC', serif;
-            letter-spacing: 2px;
-            white-space: nowrap;
-        }
-        .quiz-header .line-full {
-            flex: 1;
-            height: 1px;
-            background: #5a4a3a;
-            margin-left: 16px;
-        }
-        .quiz-line-two-wrap {
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 14px;
-        }
-        .quiz-line-two {
-            width: 66.666%;
-            height: 1px;
-            background: #5a4a3a;
+            font-size: 22px;
+            font-weight: 700;
+            color: #5a4a3a;
+            letter-spacing: 4px;
+            display: block;
         }
 
         .quiz-progress-row {
@@ -220,7 +230,6 @@
             background: rgba(255, 248, 240, 0.8);
             border-color: #b8954a;
         }
-        /* ⭐ 选中状态：燕麦分层 #f0ebe0 */
         .option-btn.selected {
             background: #f0ebe0;
             border-color: #b8954a;
@@ -242,14 +251,21 @@
             border-radius: 0;
             flex: 1;
         }
-        .q-nav .btn-sm:hover { background: #7a6a5a; }
-        .q-nav .btn-sm:disabled { opacity: 0.3; cursor: not-allowed; }
+        .q-nav .btn-sm:hover {
+            background: #7a6a5a;
+        }
+        .q-nav .btn-sm:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
         .q-nav .btn-sm.secondary {
             background: transparent;
             color: #5a4a3a;
             border: 1px solid #b8954a;
         }
-        .q-nav .btn-sm.secondary:hover { background: rgba(255, 248, 240, 0.5); }
+        .q-nav .btn-sm.secondary:hover {
+            background: rgba(255, 248, 240, 0.5);
+        }
 
         /* ================================================================
            卡牌翻转页
@@ -364,9 +380,17 @@
             white-space: nowrap;
         }
         @media (max-width: 420px) {
-            .card-flipper { width: 280px; height: 380px; }
-            .card-page-header .cn { font-size: 24px; letter-spacing: 4px; }
-            .card-page-header .en { font-size: 24px; }
+            .card-flipper {
+                width: 280px;
+                height: 380px;
+            }
+            .card-page-header .cn {
+                font-size: 24px;
+                letter-spacing: 4px;
+            }
+            .card-page-header .en {
+                font-size: 24px;
+            }
         }
 
         .btn-show-result {
@@ -385,32 +409,13 @@
             letter-spacing: 2px;
             transition: background 0.2s;
         }
-        .btn-show-result:hover { background: #7a6a5a; }
+        .btn-show-result:hover {
+            background: #7a6a5a;
+        }
 
         /* ================================================================
            结果页
            ================================================================ */
-
-        /* ⭐ 结果页所有信息框：米白分层 #fcf8f0 */
-        .quote-box,
-        .parse-box,
-        .dept-box,
-        .spirit-box,
-        .affinity-wrap,
-        .six-container,
-        .match-box,
-        .result-frame-quote,
-        .result-frame-analysis,
-        .result-frame-dept,
-        .result-frame-spirit,
-        .result-frame-bond,
-        .result-stats-wrap,
-        .result-frame-match,
-        .gallery-toggle,
-        .mini-card {
-            background: #fcf8f0;
-        }
-
         .result-title-row {
             display: flex;
             align-items: center;
@@ -455,7 +460,9 @@
             color: #f5efe8;
             letter-spacing: 4px;
         }
-        .result-title-box-wrap { text-align: center; }
+        .result-title-box-wrap {
+            text-align: center;
+        }
 
         .result-name-section {
             text-align: center;
@@ -479,11 +486,34 @@
             display: block;
         }
         @media (max-width: 420px) {
-            .result-name-section .en { font-size: 32px; }
-            .result-name-section .cn { font-size: 32px; letter-spacing: 8px; }
+            .result-name-section .en {
+                font-size: 32px;
+            }
+            .result-name-section .cn {
+                font-size: 32px;
+                letter-spacing: 8px;
+            }
+        }
+
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 10px 0 14px;
+        }
+        .result-tag {
+            background:#f0ebe0;
+            border: 1px solid #b8954a;
+            padding: 6px 18px;
+            font-size: 16px;
+            color: #5a4a3a;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 1px;
         }
 
         .result-frame-quote {
+            background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 16px 20px;
             margin-bottom: 14px;
@@ -500,21 +530,27 @@
             font-family: 'Noto Serif SC', serif;
         }
         @media (max-width: 420px) {
-            .result-frame-quote p { font-size: 18px; }
+            .result-frame-quote p {
+                font-size: 18px;
+            }
         }
 
         .result-frame-analysis {
-            border-radius: 0;
+            background: rgba(255, 248, 240, 0.6);
+            border-radius: 8px;
             padding: 14px 16px;
             border: 1px solid rgba(100, 70, 40, 0.15);
             margin-bottom: 14px;
-            font-size: 16px;
+            font-size: 20px;
             line-height: 1.8;
             color: #2e2922;
             font-family: 'Noto Serif SC', serif;
             font-weight: 400;
         }
-        .result-frame-analysis .label { font-weight: 400; color: #4a3a2a; }
+        .result-frame-analysis .label {
+            font-weight: 400;
+            color: #4a3a2a;
+        }
 
         .result-info-row {
             display: grid;
@@ -545,6 +581,7 @@
         }
 
         .result-frame-dept {
+            background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
             border: 1px solid rgba(100, 70, 40, 0.15);
@@ -559,12 +596,13 @@
         }
         .result-frame-dept .dept-comment {
             margin-top: 6px;
-            font-size: 16px;
+            font-size: 20px;
             color: #4a3a2a;
             font-style: italic;
         }
 
         .result-frame-spirit {
+            background: rgba(255, 248, 240, 0.6);
             border: 1px solid rgba(100, 70, 40, 0.15);
             border-radius: 0;
             overflow: hidden;
@@ -616,7 +654,7 @@
             border-top: 3px solid rgba(100, 70, 40, 0.25);
         }
         .result-spirit-bottom p {
-            font-size: 16px;
+            font-size: 20px;
             line-height: 1.8;
             color: #2e2922;
             font-weight: 400;
@@ -624,16 +662,32 @@
             font-family: 'Noto Serif SC', serif;
         }
         @media (max-width: 420px) {
-            .result-spirit-right img { width: 80px; height: 80px; }
-            .result-spirit-top { min-height: 80px; }
-            .result-spirit-bottom { padding: 10px 16px; }
-            .result-spirit-bottom p { font-size: 14px; }
-            .result-spirit-left { border-right-width: 2px; }
-            .result-spirit-bottom { border-top-width: 2px; }
-            .result-spirit-left .name { font-size: 16px; }
+            .result-spirit-right img {
+                width: 80px;
+                height: 80px;
+            }
+            .result-spirit-top {
+                min-height: 80px;
+            }
+            .result-spirit-bottom {
+                padding: 10px 16px;
+            }
+            .result-spirit-bottom p {
+                font-size: 14px;
+            }
+            .result-spirit-left {
+                border-right-width: 2px;
+            }
+            .result-spirit-bottom {
+                border-top-width: 2px;
+            }
+            .result-spirit-left .name {
+                font-size: 16px;
+            }
         }
 
         .result-frame-bond {
+            background: rgba(255, 248, 240, 0.6);
             border: 1px solid rgba(100, 70, 40, 0.15);
             border-radius: 0;
             padding: 14px 20px;
@@ -647,8 +701,15 @@
             height: 80px;
             flex-shrink: 0;
         }
-        .result-bond-circle svg { width: 100%; height: 100%; }
-        .result-bond-circle .bg { fill: none; stroke: #ddd4c4; stroke-width: 6; }
+        .result-bond-circle svg {
+            width: 100%;
+            height: 100%;
+        }
+        .result-bond-circle .bg {
+            fill: none;
+            stroke: #ddd4c4;
+            stroke-width: 6;
+        }
         .result-bond-circle .progress {
             fill: none;
             stroke: #7a8b9e;
@@ -672,10 +733,15 @@
             font-weight: 400;
         }
         @media (max-width: 420px) {
-            .result-frame-bond { flex-direction: column; align-items: center; gap: 8px; }
+            .result-frame-bond {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
         }
 
         .result-stats-wrap {
+            background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
             border: 1px solid rgba(100, 70, 40, 0.15);
@@ -700,9 +766,16 @@
             justify-content: center;
             align-items: center;
         }
-        #resultRadarChart { width: 220px; height: 220px; display: block; }
+        #resultRadarChart {
+            width: 280px;
+            height: 280px;
+            display: block;
+        }
         @media (max-width: 420px) {
-            #resultRadarChart { width: 180px; height: 180px; }
+            #resultRadarChart {
+                width: 180px;
+                height: 180px;
+            }
         }
 
         .result-stat-row {
@@ -711,7 +784,9 @@
             gap: 10px;
             margin-bottom: 6px;
         }
-        .result-stat-row:last-child { margin-bottom: 0; }
+        .result-stat-row:last-child {
+            margin-bottom: 0;
+        }
         .result-stat-row .stat-label {
             width: 70px;
             font-size: 14px;
@@ -745,11 +820,18 @@
             font-family: 'Noto Serif SC', serif;
         }
         @media (max-width: 420px) {
-            .result-stat-row .stat-label { width: 56px; font-size: 12px; }
-            .result-stat-row .stat-pct { width: 36px; font-size: 12px; }
+            .result-stat-row .stat-label {
+                width: 56px;
+                font-size: 12px;
+            }
+            .result-stat-row .stat-pct {
+                width: 36px;
+                font-size: 12px;
+            }
         }
 
         .result-frame-match {
+            background: rgba(255, 248, 240, 0.6);
             border-radius: 0;
             padding: 14px 16px;
             border: 1px solid rgba(100, 70, 40, 0.15);
@@ -771,6 +853,7 @@
             gap: 8px;
             width: 100%;
             padding: 12px 0;
+            background: rgba(255, 248, 240, 0.6);
             border: 1px solid #b8954a;
             cursor: pointer;
             font-family: 'Noto Serif SC', serif;
@@ -779,12 +862,16 @@
             transition: background 0.2s;
             margin-top: 2px;
         }
-        .gallery-toggle:hover { background: rgba(255, 248, 240, 0.85); }
+        .gallery-toggle:hover {
+            background: rgba(255, 248, 240, 0.85);
+        }
         .gallery-toggle .arrow {
             transition: transform 0.3s;
             display: inline-block;
         }
-        .gallery-toggle .arrow.open { transform: rotate(180deg); }
+        .gallery-toggle .arrow.open {
+            transform: rotate(180deg);
+        }
 
         .gallery-grid {
             display: grid;
@@ -803,6 +890,7 @@
         }
 
         .mini-card {
+            background: rgba(255, 248, 240, 0.7);
             border: 1.5px solid #b8954a;
             border-radius: 8px;
             padding: 12px 6px 10px;
@@ -847,37 +935,77 @@
             animation: cardPop 0.4s ease;
         }
         @keyframes cardPop {
-            0% { transform: scale(1); }
-            25% { transform: scale(0.92); }
-            55% { transform: scale(1.06); }
-            80% { transform: scale(0.98); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(0.92);
+            }
+            55% {
+                transform: scale(1.06);
+            }
+            80% {
+                transform: scale(0.98);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
         @media (max-width: 520px) {
-            .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
         @media (max-width: 400px) {
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-            .mini-card { min-height: 110px; padding: 8px 4px; }
-            .mini-card .mini-spirit { width: 50px; height: 50px; }
-            .mini-card .mini-name { font-size: 14px; }
-            .mini-card .mini-en { font-size: 10px; }
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .mini-card {
+                min-height: 110px;
+                padding: 8px 4px;
+            }
+            .mini-card .mini-spirit {
+                width: 50px;
+                height: 50px;
+            }
+            .mini-card .mini-name {
+                font-size: 14px;
+            }
+            .mini-card .mini-en {
+                font-size: 10px;
+            }
         }
 
-        .result-footer {
-            text-align: center;
-            font-size: 14px;
-            color: #6b6055;
-            border-top: 1px solid rgba(100, 70, 40, 0.15);
-            padding-top: 14px;
-            margin-top: 6px;
-            font-family: 'Noto Serif SC', serif;
-            font-weight: 400;
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
         }
-        .result-footer a {
-            color: #7e6e5c;
-            text-decoration: none;
-            border-bottom: 1px dotted #7e6e5c;
+        .result-actions .btn-save,
+        .result-actions .btn-share {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            font-size: 16px;
+            font-family: 'Noto Serif SC', serif;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: 0.2s;
+            border-radius: 0;
+        }
+        .result-actions .btn-save {
+            background: #b8954a;
+            color: #f5efe8;
+        }
+        .result-actions .btn-save:hover {
+            background: #a07a3a;
+        }
+        .result-actions .btn-share {
+            background: #5a4a3a;
+            color: #f5efe8;
+        }
+        .result-actions .btn-share:hover {
+            background: #4a3a2a;
         }
 
         .result-restart-btn {
@@ -901,14 +1029,38 @@
         }
 
         @media (max-width: 420px) {
-            .container { padding: 1.2rem 1rem; }
-            .cover-title { font-size: 26px; }
-            .cover-title .en { font-size: 15px; }
-            .cover-text .last-line { font-size: 24px; }
-            .q-text { font-size: 20px; }
-            .option-btn { font-size: 16px; padding: 8px 12px; }
-            .quiz-header .title-text { font-size: 16px; }
-            .quiz-progress-num { font-size: 13px; }
+            .container {
+                padding: 1.2rem 1rem;
+            }
+            .cover-title .cn {
+                font-size: 26px;
+            }
+            .cover-title .en {
+                font-size: 15px;
+            }
+            .cover-text .last-line {
+                font-size: 24px;
+            }
+            .q-text {
+                font-size: 20px;
+            }
+            .option-btn {
+                font-size: 16px;
+                padding: 8px 12px;
+            }
+            .quiz-header .cn {
+                font-size: 18px;
+            }
+            .quiz-header .en {
+                font-size: 15px;
+            }
+            .quiz-progress-num {
+                font-size: 13px;
+            }
+            .result-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
     </style>
 </head>
@@ -920,10 +1072,11 @@
         封面页
         ================================================================ -->
         <div class="page active" id="pageCover">
-    <div class="cover-title">
-        <span class="en">WHAT IS YOUR SENTINEL IDENTITY?</span>
-        你的哨向身份是什么？
-</div>
+            <div class="cover-title">
+                <span class="en">WHAT IS YOUR SENTINEL IDENTITY?</span>
+                <span class="cn">你的哨向身份是什么？</span>
+            </div>
+
             <div class="cover-text">
                 你好，陌生人。<br />在塔里，我们拥有四大阵营，<span class="highlight">哨兵</span>、<span class="highlight">向导</span>、<span class="highlight">双向</span>和<span class="highlight">实验体</span>。<br />
                 哨兵拥有敏锐的感官却容易五感失调，极易暴走；<br />
@@ -945,7 +1098,8 @@
         ================================================================ -->
         <div class="page" id="pageQuiz">
             <div class="quiz-header">
-                <span class="title-text">测试你的哨向身份</span>
+                <span class="en">WHAT IS YOUR SENTINEL IDENTITY?</span>
+                <span class="cn">你的哨向身份是什么？</span>
             </div>
 
             <div class="quiz-progress-row">
@@ -980,7 +1134,6 @@
                     </div>
                     <div class="card-face back">
                         <img src="https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8D%A1%E8%83%8C.jpg" alt="卡牌背面" />
-                        <div class="card-badge">✦ 卡背</div>
                     </div>
                 </div>
             </div>
@@ -1005,14 +1158,17 @@
                 </div>
             </div>
 
-            <div class="result-name-section">
-                <span class="en" id="resultEn">SENTINEL</span>
-                <span class="cn" id="resultCn">守夜人</span>
-            </div>
+           <div class="result-name-section">
+    <span class="en" id="resultEn">SENTINEL</span>
+    <span class="cn" id="resultCn">守夜人</span>
+</div>
 
-            <div class="result-frame-quote">
-                <p id="resultQuote">“黑夜是我的领地，我知道危险会在哪里出现，<br />也知道我该站在哪里等它。”</p>
-            </div>
+<div class="result-frame-quote">
+    <p id="resultQuote">“黑夜是我的领地……”</p>
+</div>
+
+<!-- 标签 -->
+<div class="result-tags" id="resultTags"></div>
 
             <div class="result-frame-analysis">
                 <span class="label">解析：</span><br />
@@ -1052,17 +1208,17 @@
 
             <div class="result-frame-bond">
                 <div class="result-bond-circle">
-                    <svg viewBox="0 0 80 80">
-                        <circle class="bg" cx="40" cy="40" r="36" />
-                        <circle class="progress" cx="40" cy="40" r="36" />
-                        <text class="center-text" id="bondText" x="40" y="45">80%</text>
-                    </svg>
+<svg viewBox="0 0 80 80">
+    <circle class="bg" cx="40" cy="40" r="36" />
+    <circle class="progress" cx="40" cy="40" r="36" />
+    <text class="center-text" id="bondText" x="40" y="40" text-anchor="middle" dominant-baseline="central">80%</text>
+</svg>
                 </div>
                 <span class="result-bond-label">精神体好感度（自洽度）</span>
             </div>
 
             <div class="result-stats-wrap">
-                <div class="stats-title">◈ 六维能力</div>
+                <div class="stats-title">战力六维图</div>
                 <div class="result-radar-box">
                     <canvas id="resultRadarChart" width="220" height="220"></canvas>
                 </div>
@@ -1110,11 +1266,14 @@
                 <div class="gallery-grid" id="galleryGrid"></div>
             </div>
 
-            <div class="result-footer">
-                ✦ 测试制作 · <a href="#">@柯基胖屁屁</a><br />
-                <span style="font-size:13px; color:#766a5e;">更多测试 · OC设定 · 哨向世界</span>
+            <!-- 保存 & 分享 -->
+            <div class="result-actions">
+                <button class="btn-save" id="btnSaveResult">💾 保存截图</button>
+                <button class="btn-share" id="btnShareResult">📤 分享结果</button>
             </div>
+
             <button class="result-restart-btn" id="btnRestart">↻ 重新测试</button>
+
         </div>
 
     </div>
@@ -1148,274 +1307,394 @@
         // ================================================================
         // 1. 问卷数据（15题）
         // ================================================================
-        const QUESTIONS = [
-            { text: '你是怎么来到这座塔的？', options: [{ label: '我主动来的。因为对这里充满了好奇，这里有我想探索的东西。', value: 'A' }, { label: '我不知道啊，我是被抓进来的。', value: 'B' }, { label: '因为有要守护的人，有必须完成的事。', value: 'C' }, { label: '我拥有危险的能力。能力太强或者太特别的东西，都会被塔盯上。', value: 'D' }] },
-            { text: '你认为塔的意志是什么？', options: [{ label: '维系秩序，所有人在规则之下各司其职，塔才能运转。', value: 'A' }, { label: '捍卫自由，塔存在的意义是让每个人都能走自己的路，不被束缚。', value: 'B' }, { label: '守护联结，塔是一张网，把所有人拴在一起，彼此支撑。', value: 'C' }, { label: '筛选强者，塔只需要有用的人，没能力的人不该占着位置。', value: 'D' }] },
-            { text: '你希望第一个来带你熟悉塔的人是什么样的？', options: [{ label: '魔鬼教官型。他语气严厉，嫌你动作慢，直接上手纠正，骂完继续让你重来。', value: 'A' }, { label: '人机导师型。他语调平静，一条一条列给你听，全是具体数据。', value: 'B' }, { label: '保姆型，很有耐心，做错了他就陪你再来一次。', value: 'C' }, { label: '老油条型。不教你标准的，只教你阴的。全是实战里磨出来的脏套路。', value: 'D' }] },
-            { text: '你觉得你在塔里适合做什么？', options: [{ label: '战斗与指挥。打前线、定方案、收集情报，反正和战场有关的事都行。', value: 'A' }, { label: '后勤与支持。管物资、做疏导、保障日常运转。', value: 'B' }, { label: '研究与实验。探索未知的东西，不计代价，没有禁忌。', value: 'C' }, { label: '塔外。我不属于塔，也不想被塔管。', value: 'D' }, { label: '记录与传承。把发生的一切记下来，让后人知道塔里曾经发生过什么。', value: 'E' }] },
-            { text: '你希望进入一个什么样的团队？', options: [{ label: '大家都是好兄弟，决策靠信任和默契。', value: 'A' }, { label: '沉默大佬1v100带飞，团队里嘻嘻哈哈干啥都行。', value: 'B' }, { label: '乐子人队伍，永远有新奇套路，战斗怎么能不玩呢！', value: 'C' }, { label: '资源顶级，训练和生活都要最好的。', value: 'D' }] },
-            { text: '你接受塔对你的职业和生活进行安排吗？', options: [{ label: '全部接受。塔怎么安排我就怎么做，塔的意志就是我的意志。', value: 'A' }, { label: '工作交给你安排没问题，但生活上我有自己的节奏。', value: 'B' }, { label: '生活上我都行，但工作上我想做我自己认准的事。', value: 'C' }, { label: '两边都不想被管，我的事我自己说了算。', value: 'D' }] },
-            { text: '你的精神图景更接近哪种颜色？', options: [{ label: '蓝色。独立的、冷静的，像一个游离在人群之外的观察者。', value: 'A' }, { label: '红色。压抑、蓄势、随时可能爆发。', value: 'B' }, { label: '绿色。生长、持续、温和而持久。', value: 'C' }, { label: '白色。混乱烧尽之后的归一、无差。', value: 'D' }] },
-            { text: '你觉得你和你的精神体之间的关系更像哪一种？', options: [{ label: '相互独立，各干各的。它有自己的节奏，我有我的事情。', value: 'A' }, { label: '我像在照顾它。它是我的责任，我会确保它稳定。', value: 'B' }, { label: '我驯服了它，我是它的主人。', value: 'C' }, { label: '它就是我。我的情绪就是它的情绪。', value: 'D' }] },
-            { text: '你一个人在房间里待着的时候，脑子里通常是什么状态？', options: [{ label: '很安静。没什么杂念，能放空，能真正休息。', value: 'A' }, { label: '在想事情。比如塔里的任务、自己的计划。', value: 'B' }, { label: '思绪飘忽。一会儿跳到这里，一会儿跳到那里。', value: 'C' }, { label: '很吵。有些念头反复冒出来，脑子里嗡嗡的。', value: 'D' }] },
-            { text: '在塔里，你最害怕发生什么事？', options: [{ label: '失控。自己的能力暴走，伤到不该伤的人。', value: 'A' }, { label: '被背叛。你信任的人在最关键的时候从背后捅你一刀。', value: 'B' }, { label: '被遗忘。你做了很多事情，但没有人记得你存在过。', value: 'C' }, { label: '平庸，慢慢地变成一个可有可无的人。', value: 'D' }] },
-            { text: '当你精神暴乱的时候，你希望怎么被治愈？', options: [{ label: '身体接触。希望有人能给我传递温度，让我感到安心。', value: 'A' }, { label: '精神辅助。希望有人进入我的精神图景，帮我把梳理混乱。', value: 'B' }, { label: '药物辅助。能吃药就不用依靠别人。', value: 'C' }, { label: '自助隔离。不想依靠别人也不想依赖药物。', value: 'D' }] },
-            { text: '你更愿意和什么样的人一起执行任务？', options: [{ label: '和我一样独立的人。各做各的，互不拖累。', value: 'A' }, { label: '比我强的人。我能从他身上学到很多东西。', value: 'B' }, { label: '需要我的人。被需要让我觉得自己是有价值的。', value: 'C' }, { label: '和我互补的人。他指挥我干活，或者我下令他执行。', value: 'D' }] },
-            { text: '战斗中你的战友倒下了，你第一反应是什么？', options: [{ label: '把他拖回来，不能让他成为战场躺尸。', value: 'A' }, { label: '他是我最好的朋友，那一瞬间我的脑子炸开，只剩下愤怒。', value: 'B' }, { label: '扫一眼直接走掉。他已经没救了，剩下的任务还得继续完成。', value: 'C' }, { label: '抡起他的尸体往敌人脸上砸。', value: 'D' }] },
-            { text: '你觉得在塔里，什么才算真正的强大？', options: [{ label: '武力超强。拳头够硬，谁都不用怕。', value: 'A' }, { label: '算无遗策，玩弄人心，洞穿一切。', value: 'B' }, { label: '精神稳定。只有哨兵的精神图景稳定，才能让实力稳步提升。', value: 'C' }, { label: '聚拢人心。把所有人拧成一条心，朝着同个目标前进。', value: 'D' }] },
-            { text: '你有想过离开这座塔吗？', options: [{ label: '没想过，这里就是我的最终归宿。', value: 'A' }, { label: '想过，只是还没到时候，等我把该做的事做完。', value: 'B' }, { label: '一直在想，有合适的时机我就走。', value: 'C' }, { label: '想不想都不重要了，我已经走不掉了。', value: 'D' }] }
-        ];
+        const QUESTIONS = [{
+            text: '你是怎么来到这座塔的？',
+            options: [
+                { label: 'A', text: '我不知道啊，我是被抓进来的。', value: 'A' },
+                { label: 'B', text: '我主动来的。因为对这里充满了好奇，这里有我想探索的东西。', value: 'B' },
+                { label: 'C', text: '我和塔做了交易，各取所需。', value: 'C' },
+                { label: 'D', text: '我拥有危险的能力。能力太强或者太特别的东西，都会被塔盯上。', value: 'D' }
+            ]
+        }, {
+            text: '你认为塔的意志是什么？',
+            options: [
+                { label: 'A', text: '维系秩序，所有人在规则之下各司其职，塔才能运转。', value: 'A' },
+                { label: 'B', text: '守护联结，塔是一张网，把所有人拴在一起，彼此支撑。', value: 'B' },
+                { label: 'C', text: '捍卫自由，塔存在的意义是让每个人都能寻找自由的出路，不被束缚。', value: 'C' },
+                { label: 'D', text: '筛选强者，塔是慕强的世界。', value: 'D' }
+            ]
+        }, {
+            text: '你希望第一个来带你熟悉塔的人是什么样的？',
+            options: [
+                { label: 'A', text: '保姆型，不会战斗，但会一直鼓励你和陪着你。', value: 'A' },
+                { label: 'B', text: '魔鬼教官。很强也很爱骂人，从他手下出来就变铁血战士。', value: 'B' },
+                { label: 'C', text: '人机导师。语调平静，靠数据说话。', value: 'C' },
+                { label: 'D', text: '老油条。只教你阴的，全是脏套路。', value: 'D' }
+            ]
+        }, {
+            text: '你觉得你在塔里适合做什么？',
+            options: [
+                { label: 'A', text: '后勤与支持。管物资、做疏导、保障日常运转。', value: 'A' },
+                { label: 'B', text: '战斗与指挥。打前线、指挥作战、收集情报，和战场有关的事都行。', value: 'B' },
+                { label: 'C', text: '研究与实验。探索未知的东西，不计代价，没有禁忌。', value: 'C' },
+                { label: 'D', text: '塔外。我不属于塔，也不想被塔管。', value: 'D' }
+            ]
+        }, {
+            text: '你希望进入一个什么样的团队？',
+            options: [
+                { label: 'A', text: '大家都是好兄弟，决策靠信任和默契，输了互相甩锅。', value: 'A' },
+                { label: 'B', text: '有大佬、有领队，全体凭实力作战。', value: 'B' },
+                { label: 'C', text: '资源顶级，训练和生活都要最好的。', value: 'C' },
+                { label: 'D', text: '乐子人队伍，永远有新奇套路，战斗怎么能不玩呢！', value: 'D' }
+            ]
+        }, {
+            text: '你接受塔对你的职业和生活进行安排吗？',
+            options: [
+                { label: 'A', text: '全部接受。塔怎么安排我就怎么接受，塔的意志就是我的意志。', value: 'A' },
+                { label: 'B', text: '工作交给塔安排没问题，反正我也懒得挑，但生活上我有自己的节奏，你别管我。', value: 'B' },
+                { label: 'C', text: '生活上我都行，但工作上我想做我自己认准的事，别把我调来调去。', value: 'C' },
+                { label: 'D', text: '两边都不想被管，我的事我自己说了算。', value: 'D' }
+            ]
+        }, {
+            text: '你的精神图景更接近哪种颜色？',
+            options: [
+                { label: 'A', text: '绿色。生长、持续、温和而持久。', value: 'A' },
+                { label: 'B', text: '红色。压抑、蓄势、随时可能爆发。', value: 'B' },
+                { label: 'C', text: '蓝色。独立的、冷静的、不群聚，像一个游离在人群之外的观察者。', value: 'C' },
+                { label: 'D', text: '白色。混乱烧尽之后的归一、无差。', value: 'D' }
+            ]
+        }, {
+            text: '你觉得你和你的精神体之间的关系更像哪一种？',
+            options: [
+                { label: 'A', text: '我像在照顾它。它是我的责任，我会留意它的状态，确保它稳定。', value: 'A' },
+                { label: 'B', text: '我驯服了它，我是它的主人。', value: 'B' },
+                { label: 'C', text: '相互独立，各干各的。它有自己的节奏，我有我的事情，互不干涉。', value: 'C' },
+                { label: 'D', text: '它就是我。我的情绪就是它的情绪，我的状态就是它的状态。', value: 'D' }
+            ]
+        }, {
+            text: '你一个人在房间里待着的时候，脑子里通常是什么状态？',
+            options: [
+                { label: 'A', text: '很安静舒缓，在房间放空。', value: 'A' },
+                { label: 'B', text: '就想训练或找人决斗，手停不下来，不想动脑。', value: 'B' },
+                { label: 'C', text: '在想事情。比如塔里的任务、自己的计划。', value: 'C' },
+                { label: 'D', text: '思绪飘乎，脑子里很吵，有些邪念反复冒出来。', value: 'D' }
+            ]
+        }, {
+            text: '在塔里，你最害怕发生什么事？',
+            options: [
+                { label: 'A', text: '被遗忘。你做了很多事情，但没有人记得你存在过。', value: 'A' },
+                { label: 'B', text: '平庸，慢慢地变成一个可有可无的人。', value: 'B' },
+                { label: 'C', text: '被背叛。你信任的人在最关键的时候从背后捅你一刀。', value: 'C' },
+                { label: 'D', text: '失控。自己的能力暴走，伤到不该伤的人，或者再也收不回来。', value: 'D' }
+            ]
+        }, {
+            text: '当你精神暴乱的时候，你希望怎么被治愈？',
+            options: [
+                { label: 'A', text: '身体接触。希望有人能给我传递温度，让我感到安心。', value: 'A' },
+                { label: 'B', text: '药物辅助。能吃药就不用依靠别人。', value: 'B' },
+                { label: 'C', text: '精神辅助。希望有人进入我的精神图景，帮我把梳理混乱。', value: 'C' },
+                { label: 'D', text: '自助隔离。不想依靠别人也不想依赖药物。', value: 'D' }
+            ]
+        }, {
+            text: '你更愿意和什么样的人一起执行任务？',
+            options: [
+                { label: 'A', text: '需要我的人。被需要让我觉得自己是有价值的，不会感到空虚。', value: 'A' },
+                { label: 'B', text: '比我强的人。我能从他身上学到很多东西。', value: 'B' },
+                { label: 'C', text: '和我互补的人。他指挥我干活，或者我下令他执行。', value: 'C' },
+                { label: 'D', text: '和我一样独立的人。各做各的，有事说事就行。', value: 'D' }
+            ]
+        }, {
+            text: '战斗中你的战友倒下了，你第一反应是什么？',
+            options: [
+                { label: 'A', text: '把他拖回来，不能让他成为战场躺尸。', value: 'A' },
+                { label: 'B', text: '他是我最好的朋友，那一瞬间我的脑子炸开，眼前只剩下愤怒的红，再回过神对面已经全躺了。', value: 'B' },
+                { label: 'C', text: '扫一眼直接走掉。他已经没救了，剩下的任务还得继续完成呢。', value: 'C' },
+                { label: 'D', text: '抡起他的尸体往敌人脸上砸。', value: 'D' }
+            ]
+        }, {
+            text: '你觉得在塔里，什么才算真正的强大？',
+            options: [
+                { label: 'A', text: '精神稳定。只有哨兵的精神图景稳定，才能让实力稳步提升。', value: 'A' },
+                { label: 'B', text: '武力超强。拳头够硬，谁都不用怕，不需要看任何人脸色，也不用费脑子算计。', value: 'B' },
+                { label: 'C', text: '算无遗策，玩弄人心，洞穿一切。', value: 'C' },
+                { label: 'D', text: '统治这座塔，塔的规则因你而改写，塔本身成为你意志的延伸。', value: 'D' }
+            ]
+        }, {
+            text: '你有想过离开这座塔吗？',
+            options: [
+                { label: 'A', text: '没想过，呆在这里挺好的，出去了反而毫无方向。', value: 'A' },
+                { label: 'B', text: '想过，只是还没到时候，等我把该做的事做完。', value: 'B' },
+                { label: 'C', text: '一直在想，有合适的时机我就走。', value: 'C' },
+                { label: 'D', text: '想不想还重要吗？我已经走不掉了。', value: 'D' }
+            ]
+        }];
 
         // ================================================================
-        // 2. 角色数据（16个角色）
+        // 2. 角色数据（16个角色，含 tags）
         // ================================================================
         const ROLES = [{
             name: '戍卫',
             en: 'SENTINEL',
+            tags: ['哨兵', '稳如磐石', '忠诚坚毅', '恪守纪律'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%8D%E5%8D%AB.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%88%98%E9%A9%AC.svg',
             quote: '“对职责的忠诚、对真理的坚守、对良知的笃定，像一块界碑。只为告诉身后的人：此处有人值守。”',
-            analysis: '你是戍卫，你的忠诚基于深刻的责任感和信念，一旦认定目标，就会建立稳固的情感联结。在困境中能够展现出惊人的韧性，不会轻易动摇，是塔内最值得信赖的依靠。规则优先，擅长执行精准指令。你比任何人都清楚，规则是无数次血与火淬炼出的最优解。',
+            analysis: '你是戍卫。你的忠诚基于深刻的责任感和信念，一旦认定目标，就会建立稳固的情感联结。<br>你在困境中能够展现出惊人的韧性，不会轻易动摇，是塔内最值得信赖的依靠。<br>你认为规则优先，擅长执行精准指令。你比任何人都清楚，规则是无数次血与火淬炼出的最优解。<br>它记录过前人的跌倒，标记过陷阱的位置，也守护过无数像你一样的士兵活着走出战场。',
             level: '中层',
             grade: 'A',
             dept: '战斗部',
             deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
             spiritName: '战马',
-            spiritDesc: '马儿是一种骄傲且自尊心极强的精神体。它的耐力是绝佳的战术搭档。当主人需要长途奔袭或阵地坚守时，它们能保持良好的精力和充沛的活力。马儿对主人情绪的感知极为敏锐。它们感知到主人的精神波动，安静地站在主人身边，稳定主人的情绪，直到主人准备好继续向前。',
+            spiritDesc: '马儿是一种骄傲且自尊心极强的精神体。<br>它的耐力是绝佳的战术搭档。当主人需要长途奔袭或阵地坚守时，它们能保持良好的精力和充沛的活力。<br>它对主人情绪的感知极为敏锐。一旦感知到主人的精神波动，就会安静地站在主人身边，稳定主人的情绪，直到主人准备好继续向前。',
             bond: 90,
             values: [0.4, 1.0, 1.0, 0.8, 1.0, 0.2],
             match: '与普通向导完美匹配'
         }, {
             name: '守夜人',
             en: 'SENTINEL',
+            tags: ['哨兵', '独来独往', '冷静谨慎', '蓄势待发'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%AE%88%E5%A4%9C%E4%BA%BA.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8C%9E%E7%8C%81.svg',
             quote: '“黑夜是我的领地，我知道危险会在哪里出现，也知道我该站在哪里等它。”',
-            analysis: '你是守夜人，是一座孤岛，不属于任何热闹。你擅长捕捉风声，不论是环境的微妙变化，还是局势中尚未可知的风险，都逃不过你的眼睛。你不会轻易暴露底牌或分享情绪，没人知道你的精神体长什么样。沉默挡住了窥探，也省去了辩驳的消耗。即便恐惧背叛，你依然在守护；即便渴望完全独立，你也没有抛下战友。这是一种带着伤疤的、异常坚固的温柔。',
+            analysis: '你是守夜人，是一座孤岛，不属于任何热闹。你擅长捕捉风声，不论是环境的微妙变化，还是局势中尚未可知的风险，都逃不过你的眼睛。<br>你不会轻易暴露底牌或分享情绪，没人知道你的精神体长什么样。<br>沉默挡住了窥探，也省去了辩驳的消耗。即便恐惧背叛，你依然在守护；即便渴望完全独立，你也没有抛下战友。这是一种带着伤疤的、异常坚固的温柔。',
             level: '中层',
             grade: 'A',
             dept: '后勤部',
             deptComment: '“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”',
             spiritName: '猞猁',
-            spiritDesc: '你和自己的精神图腾已经达成了深度共栖，两个独立个体在同一片领地里互不排斥地共存。<br>猞猁依然走自己的巡逻路线、在自己喜欢的时间进食、在自己选定的高处休息。猞猁睡觉时，允许你在同一个房间里走动。不会因为你的动作而惊醒、竖起耳朵。但请注意是允许在视线范围内，不是允许靠太近。这些在猞猁的社交语言里，已经是你被允许进入我的亲密半径的最高信号。如果猞猁察觉危险，它的第一反应是先看你一眼，再决定下一步。猞猁把你的存亡纳入了自己的生存决策，这是猞猁能做到的、最接近在乎的事。',
+            spiritDesc: '你和自己的精神图腾已经达成了深度共栖，两个独立个体在同一片领地里互不排斥地共存。<br>猞猁依然走自己的巡逻路线、在自己喜欢的时间进食、在自己选定的高处休息。<br>猞猁睡觉时，允许你在同一个房间里走动。不会因为你的动作而惊醒、竖起耳朵。但请注意是允许在视线范围内，不是允许靠太近。<br>这些在猞猁的社交语言里，已经是你被允许进入我的亲密半径的最高信号。<br>如果猞猁察觉危险，它的第一反应是先看你一眼，再决定下一步。猞猁把你的存亡纳入了自己的生存决策，这是猞猁能做到的、最接近在乎的事。',
             bond: 80,
             values: [0.6, 0.4, 0.8, 0.8, 0.2, 0.6],
             match: '需特定向导'
         }, {
             name: '凶器',
             en: 'SHADOW BLADE',
+            tags: ['哨兵', '傲骨血性', '享受孤独', '崇尚自由'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%BB%91%E6%9A%97%E5%93%A8%E5%85%B5.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%BC.svg',
             quote: '“安抚我的代价是被我撕碎，我不接受任何形式的臣服。”',
-            analysis: '你是黑暗哨兵，一把猎猎作响的妖刀。你的精神图景是永夜的荒原，战斗时随时可能暴走，你认为被安抚等于被驯服。塔强制哨兵绑定向导，本质是在阉割哨兵的天性。你想要摧毁匹配机制，让所有哨兵像你一样自由且疯狂。',
+            analysis: '你是凶器，一把猎猎作响的妖刀。<br>你的精神图景是永夜的荒原，战斗时随时可能暴走，你认为被安抚等于被驯服。<br>塔强制哨兵绑定向导，本质是在阉割哨兵的天性。你想要摧毁匹配机制，让所有哨兵像你一样自由且疯狂。',
             level: '天阶',
             grade: 'SS',
             dept: '研究部',
             deptComment: '“研究部都是正常人，说不正常的都被抓去做研究了。”',
             spiritName: '狼',
-            spiritDesc: '狼是你身上最危险的部分。它会在你出现情绪波动时，耳朵竖起、瞳孔收紧、身体微微压低。它的世界只围着你一个人转。“那个人皱眉了”、“那个人满意了”——这是它判断对错的唯一标准。谁敢碰你一根手指，它就会紧紧咬住对方。你站过的地面、坐过的椅子、握过的手，都沾着来自它领地的气味。主人的意志是它的獠牙。主人目光落在谁身上，谁就是它的目标。',
+            spiritDesc: '狼是你身上最危险的部分。<br>它会在你出现情绪波动时，耳朵竖起、瞳孔收紧、身体微微压低。它的世界只围着你一个人转。<br>“那个人皱眉了”、“那个人满意了”——这是它判断对错的唯一标准。<br>谁敢碰你一根手指，它就会紧紧咬住对方。你站过的地面、坐过的椅子、握过的手，都沾着来自它领地的气味。<br>主人的意志是它的獠牙。主人目光落在谁身上，谁就是它的目标。',
             bond: 80,
             values: [0.8, 0.8, 0.6, 1.0, 1.0, 0.4],
             match: '向导精神力不足即被吞噬'
         }, {
             name: '巡游者',
             en: 'WANDERER',
+            tags: ['哨兵', '沉默的守护者', '温柔深邃', '包容万物'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%B7%A1%E6%B8%B8%E8%80%85.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%B2%B8.svg',
             quote: '“像风滚草一样飞过塔边，越过山岗，随风而去，不带走一切。”',
-            analysis: '你是巡游者，你为了身后的人才变得强大。一旦认定了自己人，你会把他们划入你的领地范畴，不惜一切代价保护。你付出的所有守护，潜意识里都渴望对方能看见并记住。你擅长用长期的耐心陪伴。同时，你需要明确的被需要感来获得安全感，如果对方太独立、什么都不让你帮，你反而会感到失落。你是个界限感分明的人，但渴望极高浓度的共鸣。一旦进入你的核心圈，你希望彼此能达到心照不宣的默契。你像一位身披铠甲的园丁，在外面冲锋陷阵、挡风遮雨，但真正滋养你内心的，是你守护的人和关系在慢慢生长。',
+            analysis: '你是巡游者。为了身后的人才变得强大，为我们而战的人。<br>你有天生的领导力和决断力，你非常看重信任，一旦认定了自己人，你会把他们划入你的领地范畴，不惜一切代价保护。<br>你表面扛得起事，但内心非常害怕被忽视。你付出的所有守护，潜意识里都渴望对方能看见并记住。你擅长用长期的耐心陪伴代替花言巧语。<br>同时，你需要明确的被需要感来获得安全感，如果对方太独立、什么都不让你帮，你反而会感到失落。<br>你是个界限感分明的人：工作上讲规矩、服从大局，但在私人感情里，你渴望极高浓度的共鸣。你不喜欢工作上的情绪混进生活，但一旦进入你的核心圈，你又希望彼此能达到心照不宣的默契。<br>你像一位身披铠甲的园丁。你在外面冲锋陷阵、挡风遮雨，但真正滋养你内心的，是你守护的人和关系在慢慢生长。',
             level: '中层',
             grade: 'A',
             dept: '战斗部',
             deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
             spiritName: '鲸',
-            spiritDesc: '鲸鱼是你脑海深处的秘密。它在你的精神图景里缓慢游动，渴望着深层的链接。在与你相处时，会蹭一蹭你表达亲昵。它与你共脑，当你照顾受伤的同伴，甚至为死者守灵数日时，它也会表现出极度的悲伤。',
+            spiritDesc: '鲸鱼是你脑海深处的秘密。<br>它在你的精神图景里缓慢游动，渴望着深层的链接。<br>在与你相处时，会蹭一蹭你表达亲昵。它与你共脑，当你照顾受伤的同伴，甚至为死者守灵数日时，它也会表现出极度的悲伤。',
             bond: 80,
             values: [1.0, 1.0, 0.8, 0.8, 1.0, 0.6],
             match: '与普通向导完美匹配'
         }, {
             name: '变装者',
             en: 'CHAMELEON',
+            tags: ['哨兵', '善于伪装', '隐于角落', '超长记忆'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%8F%98%E8%A3%85%E8%80%85.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%AB%A0%E9%B1%BC.svg',
             quote: '“人的诸种恶行中，骄傲为最，它以多种多样的形式出现，而又在极其繁复的伪装下隐匿。”',
-            analysis: '你是变装者，你穿过很多地方，塔的走廊、荒野的废墟、游离者的据点、边境的旧哨站。你经过它们，像水流过石头，不改变形状与痕迹。每个见过你的人，都无法确定自己看到的是真实的你，还是你当时选择让他们看到的样子。',
+            analysis: '你是变装者。你极度厌恶被安排，无论是来自塔的凝视、他人的依赖还是团队的拖累。<br>你的潜意识里认为如果规则让你不舒服，那规则就是用来打破的。你在处理问题时，情绪是后置的。<br>你擅长在混乱中迅速剥离感性因素，找到最有效的路径，哪怕那条路在别人看来是脏套路。<br>对你来说，有用比正确更重要，而你的跳跃性思维恰恰能让你看到别人看不到的捷径。你并不冷漠，你认为深度绑定的关系是一种低效的能源消耗。<br>你允许别人存在，但前提是别来打乱你的节奏。你像一列有自己的轨道的列车，欢迎短暂同行，但拒绝并轨。<br>有趣的是，你的玩世不恭和时刻想走，是害怕最终被世界遗忘，所以提前摆出我不在乎的姿态。你渴望留下痕迹，但又觉得主动索取关注太掉价，于是你用策略和算计去间接影响世界。',
             level: '中层',
             grade: 'A',
             dept: '情报部',
             deptComment: '“刚来就被外派出去了，三年回来才知道塔里长什么样。”',
             spiritName: '章鱼',
-            spiritDesc: '章鱼是所有精神体里最难被记录的一种。它没有固定的形态，它不会主动靠近你，也不会主动离开你，它只是在你的视线边缘调整颜色和形态，直到你分不清那是它还是背景本身。',
+            spiritDesc: '章鱼没有固定的形态，它就是你看到它的时候它正在变成的样子。<br>它不会主动靠近你，也不会主动离开你，它只是在你的视线边缘调整颜色和形态，直到你分不清那是它还是背景本身。',
             bond: 50,
             values: [0.6, 0.2, 0.4, 0.6, 0.2, 1.0],
             match: '需特定向导'
         }, {
             name: '恶魔',
             en: 'DEMON',
+            tags: ['哨兵', '堕入黑暗', '契约缔造者', '诱导性'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%81%B6%E9%AD%94.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%9D%99%E8%9D%A0.svg',
             quote: '“如果你需要救赎，我甚至可以扮演救世主，只要你付得起代价。”',
-            analysis: '你有解构一切神圣/崇高的能力，别人信爱、忠诚、理想时，你本能地看到它们背后的利益交换和恐惧。你忍不住说出真相，而真相在大多数人听来，就是“恶魔的低语”。你有精准拿捏人性弱点的目光，你从不强迫任何人，他只给对方想要的，然后让对方自己走向崩塌。用对方自己的欲望，让对方自己深陷其中。这在你看来是公平交易，但在旁人看来是一种蛊惑。你的恶魔是有痛觉的。你太清醒，以至于无法真正享受任何东西，你很可能已经隐隐感觉到这一点。你只是让该现形的东西现形，让真正值得存活的东西在废墟里露出轮廓。',
+            analysis: '你是恶魔。你有解构一切神圣/崇高的能力，别人信爱、忠诚、理想时，你本能地看到它们背后的利益交换和恐惧。<br>你忍不住说出真相，而真相在大多数人听来，就是“恶魔的低语”。<br>你有精准拿捏人性弱点的目光，你从不强迫任何人，他只给对方想要的，然后让对方自己走向崩塌。用对方自己的欲望，让对方自己深陷其中。这在你看来是公平交易，但在旁人看来是一种蛊惑。<br>你太清醒，以至于无法真正享受任何东西，你很可能已经隐隐感觉到这一点。你只是让该现形的东西现形，让真正值得存活的东西在废墟里露出轮廓。',
             level: '-',
             grade: 'SR',
             dept: '塔外',
             deptComment: '-',
             spiritName: '蝙蝠',
-            spiritDesc: '蝙蝠是所有精神体里最不依赖视觉的一种。它不需要光线来确认方向——它用自己的声音绘制地图。在游离黑暗化状态下，蝙蝠不再只是“夜间活动”的生物，而是“已经不需要日间规则”的存在。它的世界不是由光线定义的，而是由回声定义的。',
+            spiritDesc: '蝙蝠型精神体是所有精神体里最不依赖视觉的一种。<br>它不需要光线来确认方向，它用自己的声音绘制地图。在游离黑暗化状态下，蝙蝠不再只是“夜间活动”的生物，而是“已经不需要日间规则”的存在。<br>它的世界不是由光线定义的，而是由回声定义的。',
             bond: 40,
             values: [0.2, 0.6, 0.4, 0.4, 0.8, 1.0],
             match: '☠融合即被吞噬'
         }, {
             name: '摆渡人',
             en: 'FERRYMAN',
+            tags: ['向导', '灵性通透', '温柔且坚韧', '引路人'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%91%86%E6%B8%A1%E4%BA%BA.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%B9%BF.svg',
             quote: '“我要引瞎子行不认识的道，领他们走不知道的路；在他们面前使黑暗变为光明，使弯曲变为平直。”',
-            analysis: '你是摆渡人。<br>你在任何群体里都是隐形支柱，大家不一定第一时间想起你，但动荡时你会发现没你转不动。代价是你没有并肩的平等感，永远在稍高一点守护和稍低一点后勤之间摆动，很难坐下来和人平视相处。<br>你活在祭奠未来里。你的心理时间是倒着过的，现在做的每一件事，都在为将来某一天回头看时不后悔而做。你守护一个人，不是因为这个时刻需要你，是因为你预见了将来你会怀念这个时刻。<br>你靠被需要后产生的反馈来感知自身存在，但这个闭环有致命缺口。如果外界停止发出需要，你不会有自我产生价值的能力。你和那些内在有自驱光源的人不同，你是镜子，别人照你你才亮。你守护的人独立了、塔不需要你了，你会凭空消失，因为你没有自己需要自己的机制。',
+            analysis: '你是摆渡人。你在任何群体里都是隐形支柱，大家不一定第一时间想起你，但动荡时你会发现没你转不动。<br>代价是你没有并肩的平等感，永远在稍高一点守护和稍低一点后勤之间摆动，很难坐下来和人平视相处。<br>你活在祭奠未来里。你的心理时间是倒着过的，现在做的每一件事，都在为将来某一天回头看时不后悔而做。你守护一个人，不是因为这个时刻需要你，是因为你预见了将来你会怀念这个时刻。<br>你靠被需要后产生的反馈来感知自身存在，但这个闭环有致命缺口。如果外界停止发出需要，你不会有自我产生价值的能力。<br>你和那些内在有自驱光源的人不同，你是镜子，别人照你你才亮。你守护的人独立了、塔不需要你了，你会凭空消失，因为你没有自己需要自己的机制。',
             level: '中层',
             grade: 'A',
             dept: '医疗部',
             deptComment: '“想刷步数的来，那床病人又不稳定了，得赶紧去疏导。”',
             spiritName: '鹿',
-            spiritDesc: '鹿是塔内最常见的精神体之一，但它也是最不容易被注意到的。它不张扬，不抢先，不站到最前面。它只是站在渡口边缘，等需要它的人自己走过来。它不会主动进入哨兵的精神图景，但它会在你靠近时安静地站在原地等你开口。',
+            spiritDesc: '鹿型精神体是塔内最常见的注册向导精神体之一，但它也是最不容易被注意到的。<br>它不张扬，不抢先，不站到最前面。它只是站在渡口边缘，等需要它的人自己走过来。<br>它不会主动进入哨兵的精神图景，但它会在你靠近时安静地站在原地等你开口。',
             bond: 70,
             values: [0.6, 0.8, 0.8, 0.6, 0.6, 0.4],
             match: '与普通哨兵完美匹配'
         }, {
             name: '真相窥视者',
             en: 'TRUTH SEEKER',
+            tags: ['向导', '洞穿表象', '观察者', '博学多闻'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%9C%9F%E7%9B%B8%E7%AA%A5%E8%A7%86%E8%80%85.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8C%AB%E5%A4%B4%E9%B9%B0.svg',
             quote: '“倘若一个国家是一条航行在大海上的船，新闻记者就是船头的瞭望者。他要在一望无际的海面上观察一切，审视海上的不测风云和浅滩暗礁，及时发出警告。”',
-            analysis: '你是真相窥视者，一个清醒、疏离、在庞大系统中试图保全自我意识与记忆的人。<br>你是塔内的冷眼史官，你对塔的态度非常矛盾，你承认它的存在，甚至承认自己最终归属于它，但你不愿被它吞噬。面对危险、压力，你的第一反应是退后一步，用数据和逻辑搭建护城河，拒绝卷入任何情绪。<br>你欣赏强者，是学习和趋近，因为你清楚在塔的体系里，靠近力量是存活的方式。你允许自己被影响，但前提是深度且有效，你排斥肤浅的操控，但对能真正调整你内在状态的引导保持开放。“窥视”意味着有距离地记录与理解，因为距离真相越近越危险。<br>你害怕遗忘或混淆了来路，你赋予自己的使命是记录与传承，哪怕只是为自己留存。',
+            analysis: '你是真相窥视者，一个清醒、疏离、在庞大系统中试图保全自我意识与记忆的人。<br>你是塔内的冷眼史官，你对塔的态度非常矛盾，你承认它的存在，甚至承认自己最终归属于它，但你不愿被它吞噬。<br>面对危险、压力，你的第一反应是退后一步，用数据和逻辑搭建护城河，拒绝卷入任何情绪。你欣赏强者，是学习和趋近，因为你清楚在塔的体系里，靠近力量是存活的方式。<br>你允许自己被影响，但前提是深度且有效，你排斥肤浅的操控，但对能真正调整你内在状态的引导保持开放。<br>“窥视”意味着有距离地记录与理解，因为距离真相越近越危险。你害怕遗忘或混淆了来路，你赋予自己的使命是记录与传承，哪怕只是为自己留存。',
             level: '中层',
             grade: 'A',
             dept: '档案部',
             deptComment: '“坐班时间太长了，战斗部能不能少点人员伤亡，档案记录不过来了。”',
             spiritName: '猫头鹰',
-            spiritDesc: '猫头鹰型不主动靠近哨兵，也不主动回避。它只是停在你视线边缘的高处，看着你，判断你，但不介入。它已经看了足够多，不需要再确认了。',
+            spiritDesc: '猫头鹰型精神体是塔内最安静的精神体之一。<br>它不主动靠近哨兵，也不主动回避。它只是停在你视线边缘的高处，看着你，判断你，但不介入。在封闭状态下，猫头鹰的封闭是“它已经看了足够多，不需要再确认了”。',
             bond: 90,
             values: [0.6, 0.2, 1.0, 0.8, 0.2, 0.8],
             match: '需特定哨兵'
         }, {
             name: '狡黠的掮客',
             en: 'CUNNING BROKER',
+            tags: ['向导', '思维跳跃', '质疑规则', '操纵人心'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%A1%E9%BB%A0%E7%9A%84%E6%8E%AE%E5%AE%A2.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8B%90%E7%8B%B8.svg',
             quote: '“卑鄙与伟大、恶毒与善良、仇恨与热爱可以互不排斥地并存在一颗心里。”',
-            analysis: '你是狡黠的掮客。<br>你不想被定义，无论是社会公约、伦理道德还是情感承诺，都是规则的牢笼。你追求自由，是虚无主义的践行者，不承认任何外在价值的合法性，只能依赖反抗来确认自己的存在。<br>你是高智商的社交掠食者，你能共情别人，但并不打算同情别人。你擅长把人际交往当作棋局，把规则漏洞当作捷径，精密地计算后选择叛逆。谋取物质利益太过庸俗，看着别人陷入存在主义才是真正的精神胜利。',
+            analysis: '你是狡黠的掮客。你不想被定义，无论是社会公约、伦理道德还是情感承诺，都是规则的牢笼。<br>你追求自由，是虚无主义的践行者，不承认任何外在价值的合法性，只能依赖反抗来确认自己的存在。<br>你是高智商的社交掠食者，你能共情别人，但并不打算同情别人。<br>你擅长把人际交往当作棋局，把规则漏洞当作捷径，精密地计算后选择叛逆。谋取物质利益太过庸俗，看着别人陷入存在主义才是真正的精神胜利。',
             level: '中层',
             grade: 'A',
             dept: '研究部',
             deptComment: '“研究部都是正常人，说不正常的都被抓去做研究了。”',
             spiritName: '狐狸',
-            spiritDesc: '狐狸是你精神图景的具象化。你既欣赏狐狸身上与自己同频的狡黠和自由，又深深厌恶那份一眼望穿。可能会因过度相似而互相吞噬；又因天性相吸而忍不住观察。<br>你能精准预判狐狸的每一步闪避，狐狸也能识破你的每一次伪装。两人相处像两股烟雾在纠缠，互相缠绕却互不沾染。智商层面极度过瘾，像在照一面会回击的镜子。两者都太擅长抽身和不依赖，所以永远不会有人先暴露软肋。你们的互动里全是机锋、试探和博弈，像一场永远平局的棋，精彩，但下不完，也分不出胜负。<br>你能容忍狐狸在身边出没，狐狸也默许你的存在。你们可能会在月光下默契地交换猎物情报，或在危险来临时短暂结盟，但永远不会分享同一个洞穴过冬。这种半盟友半对手的关系，让双方都感到舒适。',
+            spiritDesc: '狐狸是你精神图景的具象化。你既欣赏狐狸身上与自己同频的狡黠和自由，又深深厌恶那份一眼望穿。<br>可能会因过度相似而互相吞噬；又因天性相吸而忍不住观察。你能精准预判狐狸的每一步闪避，狐狸也能识破你的每一次伪装。两人相处像两股烟雾在纠缠，互相缠绕却互不沾染。<br>智商层面极度过瘾，像在照一面会回击的镜子。两者都太擅长抽身和不依赖，所以永远不会有人先暴露软肋。<br>你们的互动里全是机锋、试探和博弈，像一场永远平局的棋，精彩，但下不完，也分不出胜负。<br>你能容忍狐狸在身边出没，狐狸也默许你的存在。你们可能会在月光下默契地交换猎物情报，或在危险来临时短暂结盟，但永远不会分享同一个洞穴过冬。这种半盟友半对手的关系，让双方都感到舒适。',
             bond: 50,
             values: [0.4, 0.6, 0.4, 0.6, 0.4, 1.0],
             match: '需特定哨兵'
         }, {
             name: '荒泽客',
             en: 'MARSH WANDERER',
+            tags: ['向导', '优雅', '理想主义', '包容他人'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%8D%92%E6%B3%BD%E5%AE%A2.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%A4%A9%E9%B9%85.svg',
             quote: '“伤口，是光照进来的地方。”',
-            analysis: '你是荒泽客。<br>你在荒芜中点亮火光，让同行者知道为何而战。你守护的是人的精神支柱，用创作、话语或仪式，让别人在疲惫时还能抬头看见方向。你天然懂得潜移默化比说教更有效，像细雨一样渗透。 你的文字/歌声/故事成为别人撑下去的理由——这是你价值感的来源。在荒泽中捡拾散落的故事，把它们编成歌、写成诗，让后人还能听见回声。当一群人迷茫时，你用自己的方式让他们重新想起“我们是谁”“我们为何在一起”。',
+            analysis: '你是荒泽客。你在荒芜中点亮火光，让同行者知道为何而战。<br>你守护的是人的精神支柱，用创作、话语或仪式，让别人在疲惫时还能抬头看见方向。你天然懂得潜移默化比说教更有效，像细雨一样渗透。<br>你的文字、歌声或故事成为别人撑下去的理由，这是你价值感的来源。在荒泽中捡拾散落的故事，把它们编成歌、写成诗，让后人还能听见回声。<br>当一群人迷茫时，你用自己的方式让他们重新想起“我们是谁”、“我们为何在一起”。',
             level: '中层',
             grade: 'A',
             dept: '文工部',
             deptComment: '“有时集中排演1-2个月，那段时间会加班到很晚。”',
             spiritName: '天鹅',
-            spiritDesc: '天鹅不急不躁，不争不抢。浮在水面上的姿态是优雅的、静止的，水面之下偶一直在持续游动。它不主动靠近人类，只是在水面上游着，保持一个适中的距离。',
+            spiritDesc: '天鹅不急不躁，不争不抢。浮在水面上的姿态是优雅的、静止的，水面之下偶一直在持续游动。<br>它不主动靠近人类，只是在水面上游着，保持一个适中的距离。',
             bond: 70,
             values: [0.4, 1.0, 0.8, 0.6, 0.8, 0.2],
             match: '与普通哨兵完美匹配'
         }, {
             name: '局外人',
             en: 'OUTSIDER',
+            tags: ['向导', '沉稳耐心', '疏离淡漠', '冷眼旁观'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%B1%80%E5%A4%96%E4%BA%BA.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B9%8C%E9%BE%9F.svg',
             quote: '“人们永远也无法改变生活，什么样的生活都差不多。”',
-            analysis: '你是局外人，一个清醒的边界主义者，习惯用观察代替参与。<br>对你而言，被安排、被绑定、被期待，都是隐形的枷锁。你不依赖外界反馈来确认自我价值，所以能从容地站在圈外。你在大量人际交往之后需要大量独处来净化负荷。<br>你认为塔是一个巨大的法庭，它要求每个人表演合乎情理的悲伤、合乎时宜的热情。而你拒绝扮演被期待的角色。你是一段没有旁白的生活，一场没有配乐的行走。如果终局是荒谬的，那么你选择在烈日下，清醒地、自由地、不加修辞地，活着。',
+            analysis: '你是局外人，一个清醒的边界主义者，习惯用观察代替参与。<br>对你而言，被安排、被绑定、被期待，都是隐形的枷锁。你不依赖外界反馈来确认自我价值，所以能从容地站在圈外。你在大量人际交往之后需要大量独处来净化负荷。<br>你认为塔是一个巨大的法庭，它要求每个人表演合乎情理的悲伤、合乎时宜的热情。而你拒绝扮演被期待的角色。<br>你是一段没有旁白的生活，一场没有配乐的行走。如果终局是荒谬的，那么你选择在烈日下，清醒地、自由地、不加修辞地，活着。',
             level: '中层',
             grade: 'A',
             dept: '后勤部',
             deptComment: '“谁说我们闲了？人都各忙各的，忙起来连饭都吃不上。”',
             spiritName: '乌龟',
-            spiritDesc: '乌龟是塔内最不起眼却最持久的精神体之一。它不主动介入任何事，不参与任何争论，不站队，不表态。它只是安静地待在角落，观察，等待，保持自己的节奏。它的壳就是它的完整世界。',
+            spiritDesc: '乌龟是塔内最不起眼却最持久的精神体之一。<br>它不主动介入任何事，不参与任何争论，不站队，不表态。它只是安静地待在角落，观察，等待，保持自己的节奏。它的壳是它的完整世界。',
             bond: 50,
             values: [0.4, 1.0, 0.6, 0.4, 0.8, 0.8],
             match: '需特定哨兵'
         }, {
             name: '食腐者',
             en: 'SCAVENGER',
+            tags: ['向导', '死亡嗅觉', '阴险', '第六感'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%A3%9F%E8%85%90%E8%80%85.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%A7%83%E9%B9%AB.svg',
             quote: '“死亡的使者到来时，一切事务都将停止。”',
-            analysis: '你是食腐者，战场上的人在冲、在喊、在流血。你在地图后面看着。等他们耗尽体力、暴露弱点、把战线拉到你算好的那个位置，那条线决定了谁是赢家。<br>你不脏自己的手，不收尸，只出现在收尸现场，确认一切都按你的计划结束了。<br>这叫坐收渔翁之利。',
+            analysis: '你是食腐者，战场上的人在冲、在喊、在流血。你在地图后面看着。等他们耗尽体力、暴露弱点、把战线拉到你算好的那个位置，那条线决定了谁是赢家。<br>你不脏自己的手，不收尸，只出现在收尸现场，确认一切都按你的计划结束了。这叫坐收渔翁之利。',
             level: '高层',
             grade: 'S',
             dept: '战略部',
             deptComment: '“一天开八个会，就为了跟这群蠢货吵方案。还得给上级交代结果。”',
             spiritName: '秃鹫',
-            spiritDesc: '秃鹫不屑于追那些还在挣扎的东西。它盘旋在高处，视野最广，等尘埃落定才降落。但一旦落下，它就是那具残骸绝对的拥有者，狮子鬣狗都得让三分。',
+            spiritDesc: '秃鹫不屑于追那些还在挣扎的东西。<br>它盘旋在高处，视野最广，等尘埃落定才降落。但一旦落下，它就是那具残骸绝对的拥有者，狮子鬣狗都得让三分。',
             bond: 80,
             values: [0.4, 1.0, 0.8, 0.8, 1.0, 0.8],
             match: '哨兵精神力不足即被驯服'
         }, {
             name: '猎手',
             en: 'HUNTER',
+            tags: ['双向（哨兵·向导）', '敏捷矫健', '果断决绝', '冷静精准'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E7%8C%8E%E6%89%8B.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E9%BB%91%E8%B1%B9.svg',
-            quote: '“我不想输，但赢也无法令我上瘾。”',
-            analysis: '你是猎手。你的底层逻辑是弱肉强食。你默认世界是不可靠的、他人是潜在的负担、规则是弱者的枷锁。这种紧迫感让你对控制权、资源、独立性极度敏感。<br>你是典型的危机型天才，太平盛世会让你无聊，但乱世你是绝对的王者。<br>你用理性压抑愤怒，用隔离代替沟通。当现实资源配不上你的野心时，压抑的蓄势会瞬间转化为失控的爆发，让你之前所有理性的规划毁于一旦。',
+            quote: '“我不想输，但赢也无法令我满足。”',
+            analysis: '你是猎手。你的底层逻辑是弱肉强食。<br>你默认世界是不可靠的、他人是潜在的负担、规则是弱者的枷锁。这种紧迫感让你对控制权、资源、独立性极度敏感。<br>你是典型的危机型天才，太平盛世会让你无聊，但乱世你是绝对的王者。<br>你用理性压抑愤怒，用隔离代替沟通。当现实资源配不上你的野心时，压抑的蓄势会瞬间转化为失控的爆发，让你之前所有理性的规划毁于一旦。',
             level: '高层',
             grade: 'S',
             dept: '战斗部',
             deptComment: '“累得半死，凌晨五点爬起来操练。吃不了苦的别来。”',
             spiritName: '黑豹',
-            spiritDesc: '黑豹是一种不依赖族群的动物，能爬树能下水，环境适应力强。潜伏期极长，一击致命，不主动挑衅，但进入领地者必受制裁。黑豹允许自己被暂时圈养，但每一顿投喂都在强化它的咬合力。',
+            spiritDesc: '黑豹是一种不依赖族群的动物，能爬树能下水，环境适应力强。<br>潜伏期极长，一击致命，不主动挑衅，但进入领地者必受制裁。黑豹允许自己被暂时圈养，但每一顿投喂都在强化它的咬合力。',
             bond: 80,
             values: [1.0, 0.4, 0.8, 0.8, 0.2, 0.8],
             match: '需特定哨兵/向导'
         }, {
             name: '毒牙',
             en: 'VENOM FANG',
+            tags: ['双向（哨兵·向导）', '冷血无情', '缓慢侵蚀', '善于谋略'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E6%AF%92%E7%89%99.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E8%9B%87.svg',
             quote: '“只要有机会，他们随时都会展现出其邪恶的本性。”',
-            analysis: '你是毒牙。你拥有瞬间致人麻木、在无形中瓦解局面的能力。你厌恶任何形式的依附或拖累，哪怕是最亲密的伙伴，在你看来也可能是潜在的风险源。<br>你在危机中能迅速关闭情感开关，把人际互动看作棋局。你擅长在别人情绪上头时计算对手的恐惧和贪婪。<br>你的内心极其嘈杂和翻涌，但你习惯把强烈的情绪压在底层，像压缩弹簧一样，只在关键时刻瞬间弹射爆发。',
+            analysis: '你是毒牙。你拥有瞬间致人麻木、在无形中瓦解局面的能力。<br>你厌恶任何形式的依附或拖累，哪怕是最亲密的伙伴，在你看来也可能是潜在的风险源。<br>你在危机中能迅速关闭情感开关，把人际互动看作棋局。你擅长在别人情绪上头时计算对手的恐惧和贪婪。<br>你的内心极其嘈杂和翻涌，但你习惯把强烈的情绪压在底层，像压缩弹簧一样，只在关键时刻瞬间弹射爆发。',
             level: '高层',
             grade: 'S',
             dept: '战略部',
             deptComment: '“一天开八个会，就为了跟这群蠢货吵方案。还得给上级交代结果。”',
             spiritName: '蛇',
-            spiritDesc: '眼镜王蛇是一种高智商和环境记忆的蛇类。它会捕食其他蛇类，靠神经毒素和精准咬合，受到威胁时虚咬警告再下死手。犹如你表面上给予合作和试探，但一旦判定不可信任，第二次就直接下手',
+            spiritDesc: '眼镜王蛇是一种高智商+环境记忆的蛇类。<br>它会捕食其他蛇类，靠神经毒素和精准咬合，受到威胁时虚咬警告再下死手。犹如你表面上给予合作和试探，但一旦判定不可信任，第二次就直接下手',
             bond: 50,
             values: [0.8, 0.2, 0.6, 0.4, 0.2, 1.0],
             match: '精神力不足即被吞噬'
         }, {
             name: '囚徒',
             en: 'PRISONER',
+            tags: ['实验体', '被束缚', '内心撕裂', '疯狂'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%9B%9A%E5%BE%92.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B8%89%E5%A4%B4%E7%8A%AC.svg',
             quote: '“为了找借口把人囚禁起来，就劝大家都相信这个人已经疯了。”',
-            analysis: '你是囚徒，一个清醒的疯子，你清楚地知道塔在拿你的身体做实验。你只是在看着，这群人会把你自己搞成什么样子。<br>你的身心是解离状态，你被电击、解剖时会笑，你的灵魂在观察身体的崩溃。',
+            analysis: '你是囚徒，一个清醒的疯子，你清楚地知道塔在拿你的身体做实验。<br>你只是在看着，这群人会把你自己搞成什么样子。<br>你的身心是解离状态，你被电击、解剖时会笑，你的灵魂在观察身体的崩溃。',
             level: '-',
             grade: 'SR',
             dept: '实验室',
             deptComment: '“泡营养液挺舒服的，就是眼鼻嘴不在一个罐子里，看东西麻烦。”',
             spiritName: '三头犬',
-            spiritDesc: '三头犬是看守冥界入口的恶犬，负责阻止亡灵逃出，也防止活人闯入。它有些精神分裂，左头负责审视亡灵生前的记忆，中头负责物理撕咬和喷射毒液，右头防止亡灵从背后或侧方溜走，也负责预警。三头经常互相拆台，困在互相拉扯中。',
+            spiritDesc: '三头犬是看守冥界入口的恶犬，负责阻止亡灵逃出，也防止活人闯入。<br>它有些精神分裂，左头负责审视亡灵生前的记忆，中头负责物理撕咬和喷射毒液，右头防止亡灵从背后或侧方溜走，也负责预警。<br>三头经常互相拆台，困在互相拉扯中。',
             bond: 100,
             values: [1.0, 0.2, 1.0, 1.0, 1.0, 0.4],
             match: '☠融合即被吞噬'
         }, {
             name: '不可提及的存在',
             en: 'UNSPEAKABLE ONE',
+            tags: ['实验体', '不可预测', '未知来源', '吞噬万物'],
             cardImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E4%B8%8D%E5%8F%AF%E6%8F%90%E5%8F%8A%E7%9A%84%E5%AD%98%E5%9C%A8.jpg',
             spiritImg: 'https://raw.githubusercontent.com/KJPPP123/SentinelGuide1/main/%E5%88%A9%E7%BB%B4%E5%9D%A6.svg',
             quote: '“人类最原始且最强烈的情绪就是恐惧，而最原始且最强烈的恐惧就是对未知事物的恐惧。”',
-            analysis: '你是不可提及的存在。你是在塔的实验室被制造出来的——用哨兵的碎片、向导的残留、实验失败的样本、还有塔不愿意承认的东西。<br>你潜意识里认为，只要接受了塔的意志，就意味着自我的消亡。你的思维能同时容纳相互矛盾的观点。在别人眼里的疯狂，在你看来可能是破局唯一的手段。你相信在秩序彻底崩塌后，新的真理才会浮现。这让你在关键时刻有惊人的爆发力，但也让你在日常中显得不可预测。<br>你的存在本身代表着一种灾难。你以为你接受了走不掉的命运，但实际上，你认为既然结局已定，那我过程中的玩法由自己说了算，进行报复性自由。你发现在无法改变大局时，玩弄规则本身就成了你唯一的乐趣。',
+            analysis: '你是不可提及的存在。你是在塔的实验室被制造出来的——用哨兵的碎片、向导的残留、实验失败的样本、还有塔不愿意承认的东西。<br>你潜意识里认为，只要接受了塔的意志，就意味着自我的消亡。你的思维能同时容纳相互矛盾的观点。<br>在别人眼里的疯狂，在你看来可能是破局唯一的手段。你相信在秩序彻底崩塌后，新的真理才会浮现。这让你在关键时刻有惊人的爆发力，但也让你在日常中显得不可预测。<br>你的存在本身代表着一种灾难。你以为你接受了走不掉的命运，但实际上，你认为既然结局已定，那我过程中的玩法由自己说了算。你发现在无法改变大局时，玩弄规则本身就成了你唯一的乐趣。',
             level: '-',
             grade: 'SR',
             dept: '实验室',
@@ -1428,71 +1707,166 @@
         }];
 
         // ================================================================
-        // 3. 计分映射
+        // 3. 新计算逻辑：选项计数 → 题型加权 → 阵营 → 角色
         // ================================================================
-        const SCORE_MAP = {
-            '1A': [0.4, 0.1, 0.1, 0.3, 0.1, 0],
-            '1B': [0, 0.5, -0.2, 0.3, 0.1, 0.3],
-            '1C': [0.2, 0.2, 0.1, 0.2, 0.3, 0],
-            '1D': [0.5, 0.1, -0.3, 0.5, -0.3, 0.5],
-            '2A': [0.2, 0.2, 0.2, 0.2, 0.2, 0],
-            '2B': [0.5, 0.1, -0.1, -0.1, -0.1, 0.7],
-            '2C': [0.1, 0.1, 0.3, 0.2, 0.3, 0],
-            '2D': [0.5, 0, 0, 0.3, 0, 0.2],
-            '3A': [0.5, -0.1, -0.1, 0.4, 0.1, 0.2],
-            '3B': [0.2, 0.2, 0.2, 0.2, 0.2, 0],
-            '3C': [0.1, 0.4, 0.2, 0.1, 0.2, 0],
-            '3D': [0.2, 0.1, 0.5, 0.1, 0.2, -0.1],
-            '4A': [0.5, -0.3, 0.2, 0.3, 0.2, 0.1],
-            '4B': [0.1, 0.3, 0.3, 0.1, 0.2, 0],
-            '4C': [0.1, 0, 0, 0.4, 0, 0.5],
-            '4D': [0.7, -0.2, -0.2, 0.5, -0.2, 0.4],
-            '4E': [0, 0.2, 0.4, 0.1, 0.2, 0.1],
-            '5A': [0.2, 0.4, 0.1, 0.1, 0.3, -0.1],
-            '5B': [0, 0, 0.5, 0.2, 0.3, 0],
-            '5C': [0.1, 0.1, -0.2, 0.1, 0, 0.9],
-            '5D': [0.3, 0.1, 0.1, 0.3, 0.1, 0.1],
-            '6A': [0, 0.1, 0.5, 0.3, 0.3, -0.2],
-            '6B': [0.2, 0.1, 0, 0.2, 0.2, 0.3],
-            '6C': [0.3, 0.1, 0.1, 0.2, 0, 0.3],
-            '6D': [0.3, 0.1, -0.2, 0.4, -0.1, 0.5],
-            '7A': [0.2, 0.1, 0.4, 0.3, 0, 0],
-            '7B': [0.5, 0.1, -0.3, 0.1, 0, 0.6],
-            '7C': [0, 0.3, 0.2, 0, 0.5, 0],
-            '7D': [0.4, 0, 0, 0, 0, 0.6],
-            '8A': [0.4, 0, 0, 0.3, 0, 0.3],
-            '8B': [0.1, 0.4, 0.3, 0.1, 0.2, -0.1],
-            '8C': [0.5, -0.2, -0.2, 0.5, 0.1, 0.3],
-            '8D': [0.3, 0, 0, 0.4, 0.3, 0],
-            '9A': [0.1, 0.2, 0.5, 0.1, 0.1, 0],
-            '9B': [0.3, 0, 0, 0.3, 0, 0.4],
-            '9C': [0.3, 0.2, 0, 0, 0, 0.5],
-            '9D': [0.3, 0.1, 0, 0.1, 0, 0.5],
-            '10A': [0.2, 0.1, -0.3, 0.3, 0.1, 0.6],
-            '10B': [0.1, 0.3, -0.1, 0.1, 0.3, 0.3],
-            '10C': [0.1, 0.4, 0.1, 0.2, 0.2, 0],
-            '10D': [0.2, 0.1, 0.1, 0.5, 0.1, 0],
-            '11A': [0, 0.2, 0.5, 0.1, 0.3, -0.1],
-            '11B': [0, 0.5, 0.4, 0.1, 0.2, -0.2],
-            '11C': [0, 0, 0.2, 0.5, 0, 0.1],
-            '11D': [0, -0.1, 0.1, 0.7, -0.1, 0.4],
-            '12A': [0.2, -0.1, 0.1, 0.2, -0.2, 0.8],
-            '12B': [0.1, 0.1, 0.1, 0.3, 0.3, 0.1],
-            '12C': [0.1, 0.5, 0, 0.1, 0.3, 0],
-            '12D': [0.2, 0.2, 0.1, 0.1, 0.5, -0.1],
-            '13A': [0.1, 0.4, 0.1, 0.2, 0.2, 0],
-            '13B': [0.3, 0.1, -0.3, 0.5, 0.2, 0.2],
-            '13C': [0.1, -0.2, 0.3, 0.4, -0.1, 0.5],
-            '13D': [0.3, -0.3, 0, 0.2, -0.2, 1],
-            '14A': [0.3, -0.1, 0.3, 0.3, -0.1, 0.3],
-            '14B': [0.1, 0.2, 0.1, 0.2, 0, 0.4],
-            '14C': [0.1, 0.1, 0.3, 0.1, 0.4, 0],
-            '14D': [0.1, 0.4, 0.1, 0.1, 0.2, 0.1],
-            '15A': [0.1, 0.2, 0.4, 0.1, 0.3, -0.1],
-            '15B': [0.2, 0.1, 0.1, 0.3, 0.1, 0.2],
-            '15C': [0.2, 0, -0.2, 0.3, -0.1, 0.8],
-            '15D': [0.2, -0.1, -0.2, 0.2, -0.1, 1]
+
+        // 题型定义
+        const questionType = {
+            1: '智谋题',
+            2: '智谋题',
+            11: '智谋题',
+            15: '智谋题',
+            3: '普通题',
+            4: '普通题',
+            6: '普通题',
+            12: '普通题',
+            5: '战力题',
+            8: '战力题',
+            13: '战力题',
+            14: '战力题',
+            7: '危险题',
+            9: '危险题',
+            10: '危险题'
         };
+
+        // 选项→角色映射（最终版）
+        const optionRoleMap = {
+            3: { A: '戍卫', B: '摆渡人', C: '荒泽客', D: '局外人' },
+            4: { A: '戍卫', B: '摆渡人', C: '荒泽客', D: '局外人' },
+            6: { A: '戍卫', B: '摆渡人', C: '荒泽客', D: '局外人' },
+            12: { A: '戍卫', B: '摆渡人', C: '荒泽客', D: '局外人' },
+            5: { A: '守夜人', B: '凶器', C: '猎手', D: '巡游者' },
+            8: { A: '守夜人', B: '凶器', C: '猎手', D: '巡游者' },
+            13: { A: '守夜人', B: '凶器', C: '猎手', D: '巡游者' },
+            14: { A: '守夜人', B: '凶器', C: '猎手', D: '巡游者' },
+            1: { A: '变装者', B: '狡黠的掮客', C: '真相窥视者', D: '食腐者' },
+            2: { A: '变装者', B: '狡黠的掮客', C: '真相窥视者', D: '食腐者' },
+            11: { A: '变装者', B: '狡黠的掮客', C: '真相窥视者', D: '食腐者' },
+            15: { A: '变装者', B: '狡黠的掮客', C: '真相窥视者', D: '食腐者' },
+            7: { A: '恶魔', B: '毒牙', C: '囚徒', D: '不可提及的存在' },
+            9: { A: '恶魔', B: '毒牙', C: '囚徒', D: '不可提及的存在' },
+            10: { A: '恶魔', B: '毒牙', C: '囚徒', D: '不可提及的存在' }
+        };
+
+        // 主计算函数
+        function computeResult(answers) {
+            // 第一层：统计选项总次数
+            const optionCount = { A: 0, B: 0, C: 0, D: 0 };
+            for (let i = 0; i < answers.length; i++) {
+                const opt = answers[i];
+                if (optionCount[opt] !== undefined) {
+                    optionCount[opt]++;
+                }
+            }
+
+            const maxOptionCount = Math.max(optionCount.A, optionCount.B, optionCount.C, optionCount.D);
+            const topOptions = [];
+            for (const [opt, count] of Object.entries(optionCount)) {
+                if (count === maxOptionCount) {
+                    topOptions.push(opt);
+                }
+            }
+
+            // 如果只有一个选项最多
+            if (topOptions.length === 1) {
+                const selectedOption = topOptions[0];
+                const optionToType = { A: '普通题', B: '战力题', C: '智谋题', D: '危险题' };
+                const targetType = optionToType[selectedOption];
+                return getRoleFromType(targetType, answers);
+            }
+
+            // 第二层：平票处理
+            const tiedOptions = topOptions;
+            const typeCount = { '普通题': 0, '战力题': 0, '智谋题': 0, '危险题': 0 };
+            for (let i = 0; i < answers.length; i++) {
+                const opt = answers[i];
+                const qNum = i + 1;
+                if (tiedOptions.includes(opt)) {
+                    const type = questionType[qNum];
+                    if (type) {
+                        typeCount[type]++;
+                    }
+                }
+            }
+
+            const maxTypeCount = Math.max(typeCount['普通题'], typeCount['战力题'], typeCount['智谋题'], typeCount['危险题']);
+            const topTypes = [];
+            for (const [type, count] of Object.entries(typeCount)) {
+                if (count === maxTypeCount) {
+                    topTypes.push(type);
+                }
+            }
+
+            if (topTypes.length === 1) {
+                return getRoleFromType(topTypes[0], answers);
+            }
+
+            // 第三层：题型也平票，用极端值判定
+            let selectedType = topTypes[0];
+            for (const type of topTypes) {
+                const qNums = [];
+                for (const [qNum, t] of Object.entries(questionType)) {
+                    if (t === type) {
+                        qNums.push(parseInt(qNum));
+                    }
+                }
+                let dCount = 0;
+                for (const qNum of qNums) {
+                    if (answers[qNum - 1] === 'D') {
+                        dCount++;
+                    }
+                }
+                if (dCount >= 2) {
+                    selectedType = type;
+                    break;
+                }
+            }
+
+            return getRoleFromType(selectedType, answers);
+        }
+
+        // 辅助函数：从指定题型中统计选项分布，确定具体角色
+        function getRoleFromType(type, answers) {
+            const qNums = [];
+            for (const [qNum, t] of Object.entries(questionType)) {
+                if (t === type) {
+                    qNums.push(parseInt(qNum));
+                }
+            }
+
+            const optCount = { A: 0, B: 0, C: 0, D: 0 };
+            for (const qNum of qNums) {
+                const opt = answers[qNum - 1];
+                if (optCount[opt] !== undefined) {
+                    optCount[opt]++;
+                }
+            }
+
+            const maxCount = Math.max(optCount.A, optCount.B, optCount.C, optCount.D);
+            const topOpts = [];
+            for (const [opt, count] of Object.entries(optCount)) {
+                if (count === maxCount) {
+                    topOpts.push(opt);
+                }
+            }
+
+            if (topOpts.length === 1) {
+                const selectedOpt = topOpts[0];
+                const sampleQNum = qNums[0];
+                return optionRoleMap[sampleQNum][selectedOpt];
+            }
+
+            // 危险题平票：随机选
+            if (type === '危险题') {
+                const randomOpt = topOpts[Math.floor(Math.random() * topOpts.length)];
+                const sampleQNum = qNums[0];
+                return optionRoleMap[sampleQNum][randomOpt];
+            }
+
+            const selectedOpt = topOpts[0];
+            const sampleQNum = qNums[0];
+            return optionRoleMap[sampleQNum][selectedOpt];
+        }
 
         // ================================================================
         // 4. 问卷控制
@@ -1520,9 +1894,6 @@
         const cardPageCn = document.getElementById('cardPageCn');
         const cardPageEn = document.getElementById('cardPageEn');
 
-        // ================================================================
-        // 5. 渲染题目
-        // ================================================================
         function renderQuestion(index) {
             const q = QUESTIONS[index];
             const pct = Math.round(((index + 1) / QUESTIONS.length) * 100);
@@ -1536,10 +1907,11 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 if (answers[index] === opt.value) btn.classList.add('selected');
-                btn.textContent = `${String.fromCharCode(65 + i)}. ${opt.label}`;
+                btn.textContent = `${opt.label}. ${opt.text}`;
                 btn.dataset.value = opt.value;
                 btn.addEventListener('click', function() {
-                    optionsContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    optionsContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove(
+                    'selected'));
                     this.classList.add('selected');
                     answers[index] = this.dataset.value;
                     updateButtons();
@@ -1575,43 +1947,16 @@
         }
 
         // ================================================================
-        // 6. 计分 + 匹配
-        // ================================================================
-        function computeResult() {
-            const userValues = [0, 0, 0, 0, 0, 0];
-            for (let i = 0; i < QUESTIONS.length; i++) {
-                const key = (i + 1) + answers[i];
-                const score = SCORE_MAP[key];
-                if (score) {
-                    for (let j = 0; j < 6; j++) {
-                        userValues[j] += score[j];
-                    }
-                }
-            }
-
-            const normalized = userValues.map(v => {
-                let val = (v + 2) / 7;
-                return Math.min(1, Math.max(0, val));
-            });
-
-            const results = ROLES.map(role => {
-                let sum = 0;
-                for (let i = 0; i < 6; i++) {
-                    sum += (normalized[i] - role.values[i]) ** 2;
-                }
-                return { ...role, dist: Math.sqrt(sum) };
-            });
-
-            results.sort((a, b) => a.dist - b.dist);
-            return { normalized, results, best: results[0] };
-        }
-
-        // ================================================================
-        // 7. 卡牌页
+        // 5. 卡牌页
         // ================================================================
         function calculateAndShowCard() {
-            const result = computeResult();
-            const role = result.best;
+            // 用新逻辑计算结果
+            const roleName = computeResult(answers);
+            const role = ROLES.find(r => r.name === roleName);
+            if (!role) {
+                alert('未找到匹配角色，请重新测试');
+                return;
+            }
             window._matchedRole = role;
 
             pageQuiz.classList.remove('active');
@@ -1633,7 +1978,7 @@
         });
 
         // ================================================================
-        // 8. 结果页
+        // 6. 结果页
         // ================================================================
         function showResultPage() {
             const role = window._matchedRole;
@@ -1645,15 +1990,21 @@
             document.getElementById('resultEn').textContent = role.en || 'SENTINEL';
             document.getElementById('resultCn').textContent = role.name;
 
+            // 渲染标签
+            const tagsHtml = role.tags.map(tag =>
+                `<span class="result-tag">${tag}</span>`
+            ).join('');
+            document.getElementById('resultTags').innerHTML = tagsHtml;
+
             document.getElementById('resultQuote').textContent = role.quote || '“……”';
-            document.getElementById('resultAnalysis').textContent = role.analysis || '……';
+            document.getElementById('resultAnalysis').innerHTML= role.analysis || '……';
             document.getElementById('resultLevel').textContent = role.level || '-';
             document.getElementById('resultGrade').textContent = role.grade || '-';
             document.getElementById('resultDept').textContent = `所属部门：${role.dept || '-'}`;
             document.getElementById('resultDeptComment').textContent = role.deptComment || '';
             document.getElementById('resultSpiritName').textContent = role.spiritName || '-';
             document.getElementById('resultSpiritImg').src = role.spiritImg || '';
-            document.getElementById('resultSpiritDesc').textContent = role.spiritDesc || '……';
+            document.getElementById('resultSpiritDesc').innerHTML= role.spiritDesc || '……';
 
             const bond = role.bond || 0;
             const circumference = 2 * Math.PI * 36;
@@ -1678,13 +2029,14 @@
                 renderGallery();
             }
 
+            // 滚动到结果页顶部
             pageResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         btnShowResult.addEventListener('click', showResultPage);
 
         // ================================================================
-        // 9. 雷达图
+        // 7. 雷达图
         // ================================================================
         function drawRadar(values) {
             const canvas = document.getElementById('resultRadarChart');
@@ -1760,7 +2112,7 @@
         }
 
         // ================================================================
-        // 10. 身份牌画廊
+        // 8. 身份牌画廊
         // ================================================================
         function renderGallery() {
             const grid = document.getElementById('galleryGrid');
@@ -1787,9 +2139,74 @@
             galleryOpen = !galleryOpen;
             document.getElementById('galleryGrid').classList.toggle('open', galleryOpen);
             document.getElementById('galleryArrow').classList.toggle('open', galleryOpen);
-            this.querySelector('span:first-child').textContent = galleryOpen ? '📜 收起所有身份牌' :
-                '📜 点击查看所有身份牌';
+            this.querySelector('span:first-child').textContent = galleryOpen ? ' 收起所有身份牌' :
+                '点击查看所有身份牌';
         });
+
+        // ================================================================
+        // 9. 保存截图（html2canvas）
+        // ================================================================
+        document.getElementById('btnSaveResult').addEventListener('click', function() {
+            const resultPage = document.getElementById('pageResult');
+            html2canvas(resultPage, {
+                scale: 2,
+                backgroundColor: '#f5f0e8',
+                allowTaint: false,
+                useCORS: true,
+                logging: false,
+                width: resultPage.scrollWidth,
+                height: resultPage.scrollHeight,
+                windowWidth: resultPage.scrollWidth,
+                windowHeight: resultPage.scrollHeight
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `哨向测试_${document.getElementById('resultCn').textContent}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error('截图失败:', err);
+                alert('截图生成失败，请重试或使用浏览器截图功能。');
+            });
+        });
+
+        // ================================================================
+        // 10. 分享结果
+        // ================================================================
+ document.getElementById('btnShareResult').addEventListener('click', function() {
+    const resultPage = document.getElementById('pageResult');
+    const roleName = document.getElementById('resultCn').textContent;
+
+    html2canvas(resultPage, {
+        scale: 2,
+        backgroundColor: '#f5f0e8',
+        useCORS: true,
+        logging: false,
+        width: resultPage.scrollWidth,
+        height: resultPage.scrollHeight,
+        windowWidth: resultPage.scrollWidth,
+        windowHeight: resultPage.scrollHeight
+    }).then(canvas => {
+        canvas.toBlob(function(blob) {
+            const file = new File([blob], `哨向测试_${roleName}.png`, { type: 'image/png' });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    title: '哨向测试 · 塔内身份',
+                    text: `我在塔里测出了【${roleName}】！`,
+                    files: [file]
+                }).catch(() => {});
+            } else {
+                const link = document.createElement('a');
+                link.download = `哨向测试_${roleName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                alert(' 截图已保存，快去分享吧！');
+            }
+        });
+    }).catch(err => {
+        console.error('截图失败:', err);
+        alert('截图生成失败，请重试或使用浏览器截图功能。');
+    });
+});
 
         // ================================================================
         // 11. 页面切换
@@ -1814,9 +2231,6 @@
             window._matchedRole = null;
         }
 
-        // ================================================================
-        // 12. 绑定事件
-        // ================================================================
         btnStart.addEventListener('click', goToQuiz);
         btnPrev.addEventListener('click', goToPrev);
         btnNext.addEventListener('click', goToNext);
@@ -1834,8 +2248,8 @@
         });
 
         pageCover.classList.add('active');
-        console.log('🛡️ 哨向测试已加载');
-        console.log(`📚 ${QUESTIONS.length} 道题，${ROLES.length} 个角色`);
+        console.log('哨向测试已加载');
+        console.log(` ${QUESTIONS.length} 道题，${ROLES.length} 个角色`);
     </script>
 
 </body>
